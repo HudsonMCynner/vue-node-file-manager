@@ -1,6 +1,6 @@
 export default {
   methods: {
-    getFile (multiple = this.multiple) {
+    getFile (multiple = this.multiple, diretorio) {
       // eslint-disable-next-line no-unused-vars
       return new Promise((resolve, reject) => {
         const element = document.createElement('input')
@@ -8,6 +8,10 @@ export default {
         element.id = 'tempFile'
         if (multiple) {
           element.multiple = true
+        }
+        if (diretorio) {
+          element.webkitdirectory = true
+          element.mozdirectory = true
         }
         element.style.display = 'none'
         element.click()

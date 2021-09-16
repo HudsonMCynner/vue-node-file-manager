@@ -23,7 +23,8 @@ module.exports = function (ctx) {
       'dev',
       'i18n',
       'util',
-      'vuelidate'
+      'vuelidate',
+      'notify'
     ],
     css: [
       'app.styl'

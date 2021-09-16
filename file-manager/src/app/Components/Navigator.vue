@@ -2,9 +2,10 @@
   <div class="q-pa-md q-gutter-sm">
     <q-input
       ref="filter"
-      filled
+      outlined
+      dense
       v-model="filter"
-      label="Filter"
+      placeholder="Pesquisar"
     >
       <template v-slot:append>
         <q-icon
@@ -26,41 +27,20 @@
 </template>
 
 <script>
+import FileService from 'src/service/FileListService'
+
 export default {
   name: 'Navigator',
+  created () {
+    FileService.build().getAllDir()
+      .then((response) => {
+        this.simple = response
+      })
+  },
   data () {
     return {
       filter: '',
-      simple: [
-        {
-          label: 'Satisfied customers',
-          children: [
-            {
-              label: 'Good food',
-              children: [
-                { label: 'Quality ingredients' },
-                { label: 'Good recipe' }
-              ]
-            },
-            {
-              label: 'Good service (disabled node)',
-              disabled: true,
-              children: [
-                { label: 'Prompt attention' },
-                { label: 'Professional waiter' }
-              ]
-            },
-            {
-              label: 'Pleasant surroundings',
-              children: [
-                { label: 'Happy atmosphere' },
-                { label: 'Good table presentation' },
-                { label: 'Pleasing decor' }
-              ]
-            }
-          ]
-        }
-      ]
+      simple: []
     }
   },
   methods: {

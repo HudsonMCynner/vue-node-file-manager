@@ -4,6 +4,7 @@ const fileService = require('../services/file.service.js');
 const app = express();
 
 router.get('/files', fileService.getAll);
+router.get('/dirs', fileService.getDir);
 const options = fileService.getFileOptions();
 const multer = require('multer')(options);
 

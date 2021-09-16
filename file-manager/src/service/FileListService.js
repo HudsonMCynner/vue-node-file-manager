@@ -47,4 +47,11 @@ export default class FileListService extends Rest {
   deleteFile (fileId) {
     return this.delete(`/files/${fileId}`)
   }
+
+  /**
+   * @returns {Promise}
+   */
+  getAllDir () {
+    return this.get(`/dirs`)
+  }
 }

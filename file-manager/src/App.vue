@@ -3,8 +3,8 @@
     <q-ajax-bar
       ref="bar"
       position="top"
-      color="accent"
-      size="0"
+      color="primary"
+      size="5px"
       @start="$q.loading.show()"
       @stop="$q.loading.hide()"
     />

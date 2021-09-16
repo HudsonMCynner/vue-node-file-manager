@@ -5,6 +5,7 @@ const async = require('async')
 const fs = require('fs')
 const path = require('path')
 const btoa = require('btoa')
+const { readdirSync } = require('fs')
 
 const fileConfig = require('../config/file.config')
 
@@ -13,6 +14,19 @@ mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 module.exports = {
+    getDir: (req, res, next) => {
+        const getDirectories = (source) => {
+            return readdirSync(source, { withFileTypes: true })
+              .filter(dirent => dirent.isDirectory())
+              .map(dirent => {
+                  return {
+                      label: dirent.name,
+                      children: getDirectories(`${source}\\${dirent.name}`)
+                  }
+              }).sort((a, b) => a.label < b.label)
+        }
+        res.send(getDirectories(fileConfig.uploadsFolder));
+    },
     getAll: (req, res, next) => {
         File.find((err, files) => {
             if (err) {
