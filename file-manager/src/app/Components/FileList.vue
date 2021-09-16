@@ -11,11 +11,17 @@
           <q-icon name="search" />
         </template>
       </q-input>
-      <app-file-uploader v-bind="inputUpload" />
       <q-btn
         outline
         style="color: goldenrod;"
         label="Enviar"
+        @click="selectFiles"
+      />
+      <q-btn
+        outline
+        style="color: goldenrod;"
+        label="Excluir"
+        @click="removeFile"
       />
     </div>
     <div class="file-list-content">
@@ -53,9 +59,11 @@
 
 <script>
 import FileService from 'src/service/FileListService'
+import file from './mixins/file'
 
 export default {
   name: 'FileList',
+  mixins: [file],
   props: {
     value: {
       type: Object,
@@ -64,9 +72,8 @@ export default {
   },
   created () {
     this.model = this.value
-    FileService.build().get('')
+    FileService.build().getAllFiles()
       .then((response) => {
-        // []
         this.files = response
       })
   },
@@ -84,6 +91,34 @@ export default {
     selectMode: 'single' // single | multiple
   }),
   methods: {
+    removeFile () {
+      if (this.selectMode === 'single') {
+        if (this.selected.length) {
+          debugger
+          FileService.build().deleteFile(this.selected[0]._id)
+            .then(() => {
+              FileService.build().getAllFiles()
+                .then((response) => {
+                  this.files = response
+                })
+            })
+        }
+        else {
+          console.log('~> Selecione um arquivo')
+        }
+      }
+    },
+    selectFiles () {
+      this.getFile(true).then((files) => {
+        FileService.build().uploadFiles(files)
+          .then(() => {
+            FileService.build().getAllFiles()
+              .then((response) => {
+                this.files = response
+              })
+          })
+      })
+    },
     selectFile (file) {
       debugger
       const index = this.selected.findIndex((fileSel) => fileSel.id === file.id)
@@ -129,7 +164,7 @@ export default {
 }
 .file-lista-container .file-list-header {
   display: grid;
-  grid-template-columns: 1fr 1fr 130px;
+  grid-template-columns: 1fr 130px 130px;
   grid-gap: 10px;
   padding: 5px;
 }

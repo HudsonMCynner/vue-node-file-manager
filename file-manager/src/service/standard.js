@@ -4,7 +4,6 @@ export const BASE_URL = `${process.env.app.configurationFile ? window.configurat
 export let TOKEN = ''
 const standard = axios.create({
   baseURL: BASE_URL,
-  timeout: 100000,
   transformResponse: [
     function (data) {
       return data
@@ -28,46 +27,6 @@ export const setToken = (token) => {
  */
 export const getToken = () => {
   return standard.defaults.headers.common.Authorization
-}
-
-/**
- * @param {Number} idSistema
- */
-export const setSistemaHeader = (idSistema) => {
-  standard.defaults.headers.common.SISTEMA = idSistema
-}
-
-/**
- * @param {String} versaoSistema
- */
-export const setVersaoSistemaHeader = (versaoSistema) => {
-  standard.defaults.headers.common.VERSAO_SISTEMA = versaoSistema
-}
-/**
- * @param {Number} idModulo
- */
-export const setModuloHeader = (idModulo) => {
-  standard.defaults.headers.common.MODULO = idModulo
-}
-/**
- * @param {Number} idCliente
- */
-export const setClienteHeader = (idCliente) => {
-  if (!idCliente) {
-    delete standard.defaults.headers.common.CLIENTE
-    return
-  }
-  standard.defaults.headers.common.CLIENTE = idCliente
-}
-/**
- * @param {Number} idMatricula
- */
-export const setMatriculaHeader = (idMatricula) => {
-  if (!idMatricula) {
-    delete standard.defaults.headers.common.MATRICULA
-    return
-  }
-  standard.defaults.headers.common.MATRICULA = idMatricula
 }
 
 export const responseSuccess = (response) => {

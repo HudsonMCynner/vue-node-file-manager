@@ -1,10 +1,10 @@
 <template>
   <div class="q-pa-md q-gutter-sm">
     <q-input
-      ref="filterRef"
+      ref="filter"
       filled
       v-model="filter"
-      label="Search - only filters labels that have also '(*)'"
+      label="Filter"
     >
       <template v-slot:append>
         <q-icon
@@ -20,63 +20,53 @@
       :nodes="simple"
       node-key="label"
       :filter="filter"
-      :filter-method="myFilterMethod"
-      v-model:expanded="expanded"
       default-expand-all
     />
   </div>
 </template>
 
 <script>
-import { ref } from 'vue'
 export default {
   name: 'Navigator',
-  setup () {
-    const filter = ref('')
-    const filterRef = ref(null)
-
+  data () {
     return {
-      filter,
-      filterRef,
-      expanded: ref(['Good service (disabled node) (*)']),
-
+      filter: '',
       simple: [
         {
-          label: 'Documentos',
-          icon: 'folder',
+          label: 'Satisfied customers',
           children: [
-            { label: 'Trabalho' },
-            { label: 'Escola' }
-          ]
-        },
-        {
-          label: 'Imagens',
-          icon: 'folder',
-          children: [
-            { label: 'Background' },
-            { label: 'Demos' }
-          ]
-        },
-        {
-          label: 'Videos',
-          icon: 'folder',
-          children: [
-            { label: 'Cursos' },
-            { label: 'Trabalho' },
-            { label: 'Gravações' }
+            {
+              label: 'Good food',
+              children: [
+                { label: 'Quality ingredients' },
+                { label: 'Good recipe' }
+              ]
+            },
+            {
+              label: 'Good service (disabled node)',
+              disabled: true,
+              children: [
+                { label: 'Prompt attention' },
+                { label: 'Professional waiter' }
+              ]
+            },
+            {
+              label: 'Pleasant surroundings',
+              children: [
+                { label: 'Happy atmosphere' },
+                { label: 'Good table presentation' },
+                { label: 'Pleasing decor' }
+              ]
+            }
           ]
         }
-      ],
-
-      myFilterMethod (node, filter) {
-        const filt = filter.toLowerCase()
-        return node.label && node.label.toLowerCase().indexOf(filt) > -1
-      },
-
-      resetFilter () {
-        filter.value = ''
-        filterRef.value.focus()
-      }
+      ]
+    }
+  },
+  methods: {
+    resetFilter () {
+      this.filter = ''
+      this.$refs.filter.focus()
     }
   }
 }
