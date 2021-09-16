@@ -65,7 +65,6 @@ module.exports = {
             if (err) {
                 return res.status(400).end('Erro');
             }
-
             return res.send(savedModels)
         })
     },
