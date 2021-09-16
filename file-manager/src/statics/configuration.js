@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 let configuration = {
-  serverAPI: 'http://cnny-machado.ddns.net:8097'
+  serverAPI: 'http://localhost:3000/api'
 
   // serverAPI: 'http://localhost:8080'
 

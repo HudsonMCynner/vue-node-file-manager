@@ -37,8 +37,8 @@
           >
             <td class="style-td">
               <q-checkbox
-                :model-value="isSelected(file.id)"
-                @update="selectFile(file)"
+                :value="isSelected(file._id)"
+                @input="selectFile(file)"
               />
             </td>
             <td class="style-td">
@@ -104,7 +104,7 @@ export default {
       if (!id) {
         return false
       }
-      return this.selected.some((file) => file.id === id)
+      return this.selected.some((file) => file._id === id)
     }
   },
   watch: {

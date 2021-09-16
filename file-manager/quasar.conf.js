@@ -29,6 +29,7 @@ module.exports = function (ctx) {
       'app.styl'
     ],
     extras: [
+      'material-icons'
       // ctx.theme.mat ? 'roboto-font' : null
       /*
        * 'material-icons' // optional, you are not bound to it
