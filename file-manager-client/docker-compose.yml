@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  tagnos-front:
+    image: lyseontech/quasar:v0.16.4
+    container_name: tagnos-front
+    user: node
+    working_dir: /var/www/app
+    command: sh /var/www/app/quasar.sh
+    volumes:
+      - .:/var/www/app
+    ports:
+      - 8080:8080
