@@ -16,32 +16,42 @@
         />
       </template>
     </q-input>
-    <folders-tree />
+    <tree-folders
+      :root="true"
+      :nodes="tree.nodes"
+      :depth="0"
+      :label="tree.label"
+    />
   </div>
 </template>
 
 <script>
 import FileService from 'src/service/FileListService'
-import FoldersTree from 'src/app/Components/FoldersTree'
 
 export default {
   name: 'Navigator',
-  components: { FoldersTree },
   created () {
     FileService.build().getAllDir()
       .then((response) => {
-        this.simple = response.map((item) => {
+        this.tree.nodes = response.map((item) => {
           return {
             ...item,
             icon: 'folder'
           }
         })
       })
+    FileService.build().getFilesByDir()
+      .then((response) => {
+        console.log('~> ', response)
+      })
   },
   data () {
     return {
-      filter: '',
-      simple: []
+      tree: {
+        label: 'Pastas',
+        nodes: []
+      },
+      filter: ''
     }
   },
   methods: {

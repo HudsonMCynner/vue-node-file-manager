@@ -59,4 +59,16 @@ export default class FileListService extends Rest {
   getAllDir () {
     return this.get(`/dirs`)
   }
+
+  /**
+   * @param path
+   * @returns {Promise}
+   */
+  getFilesByDir (path = 'F:/uploads') {
+    return this.get('/files/dir', {
+      params: {
+        path
+      }
+    })
+  }
 }

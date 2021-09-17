@@ -35,11 +35,20 @@ module.exports = {
               .map(dirent => {
                   return {
                       label: dirent.name,
-                      children: getDirectories(`${source}\\${dirent.name}`)
+                      path: `${source}/${dirent.name}`,
+                      children: getDirectories(`${source}/${dirent.name}`)
                   }
               }).sort((a, b) => a.label < b.label)
         }
         res.send(getDirectories(fileConfig.uploadsFolder));
+    },
+    getFilesByDir: (req, res, next) => {
+        File.find({ path: req.query.path }, (err, files) => {
+            if (err) {
+                return res.status(404).end();
+            }
+            res.send(files);
+        });
     },
     getAll: (req, res, next) => {
         File.find((err, files) => {
@@ -63,6 +72,7 @@ module.exports = {
                 }
 
                 fileModel.encodedName = btoa(fileModel._id)
+                fileModel.path = req.folderPath || fileConfig.uploadsFolder
                 fileModel.save((err) => {
                     if (err) {
                         return next('Error creating new file', err);
