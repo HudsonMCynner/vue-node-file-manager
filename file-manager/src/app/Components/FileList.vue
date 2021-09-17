@@ -63,6 +63,7 @@
             <th class="style-th">
               Nome
             </th>
+            <th />
           </tr>
         </thead>
         <tbody>
@@ -80,6 +81,18 @@
             </td>
             <td class="style-td">
               {{ file.name }}
+            </td>
+            <td
+              class="style-td"
+              style="width: 45px"
+            >
+              <q-btn
+                flat
+                dense
+                size="md"
+                icon="file_download"
+                @click="downloadFile(file)"
+              />
             </td>
           </tr>
         </tbody>
@@ -122,6 +135,14 @@ export default {
     selectMode: 'multiple' // single | multiple
   }),
   methods: {
+    downloadFile ({ encodedName, name }) {
+      let base = 'http://localhost:3000'
+      const link = document.createElement('a')
+      link.href = `${base}/file/download/${encodedName}`
+      link.target = '_blank'
+      link.download = name
+      link.click()
+    },
     removeFile () {
       if (this.selectMode === 'single') {
         if (this.selected.length) {

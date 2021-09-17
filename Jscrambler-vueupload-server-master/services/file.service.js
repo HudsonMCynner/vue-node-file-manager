@@ -14,6 +14,20 @@ mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 module.exports = {
+    createDirectory: (base = fileConfig.uploadsFolder) => {
+        const mkdir = (dir) => {
+            fs.exists(dir, exist => {
+                if (!exist) {
+                    return fs.mkdir(dir, error => new Error(dir))
+                }
+            })
+        }
+        const paths = fileConfig.baseDirectories
+        mkdir(base)
+        paths.forEach((path) => {
+            mkdir(`${base}/${path}`)
+        })
+    },
     getDir: (req, res, next) => {
         const getDirectories = (source) => {
             return readdirSync(source, { withFileTypes: true })

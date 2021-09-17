@@ -16,25 +16,26 @@
         />
       </template>
     </q-input>
-
-    <q-tree
-      :nodes="simple"
-      node-key="label"
-      :filter="filter"
-      default-expand-all
-    />
+    <folders-tree />
   </div>
 </template>
 
 <script>
 import FileService from 'src/service/FileListService'
+import FoldersTree from 'src/app/Components/FoldersTree'
 
 export default {
   name: 'Navigator',
+  components: { FoldersTree },
   created () {
     FileService.build().getAllDir()
       .then((response) => {
-        this.simple = response
+        this.simple = response.map((item) => {
+          return {
+            ...item,
+            icon: 'folder'
+          }
+        })
       })
   },
   data () {
@@ -44,6 +45,9 @@ export default {
     }
   },
   methods: {
+    update (event) {
+      console.log('~> ', event)
+    },
     resetFilter () {
       this.filter = ''
       this.$refs.filter.focus()

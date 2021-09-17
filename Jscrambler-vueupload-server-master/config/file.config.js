@@ -7,6 +7,7 @@ module.exports = {
       // 'video/mp4': 'mp4'
     },
     maxFileSize: '2GB',
-    uploadsFolder: 'F:\\uploads',
+    uploadsFolder: 'F:/uploads',
+    baseDirectories: ['Documentos', 'Trabalho', 'Estudo', 'Outros'],
     dbConnection: 'mongodb://127.0.0.1:27017/fileuploaddb'
 }

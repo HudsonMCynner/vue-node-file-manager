@@ -49,6 +49,11 @@ export default class FileListService extends Rest {
   }
 
   /**
+   */
+  downloadFile () {
+  }
+
+  /**
    * @returns {Promise}
    */
   getAllDir () {
