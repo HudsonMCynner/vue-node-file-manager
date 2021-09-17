@@ -177,7 +177,7 @@ export default {
 */
 ul {
   list-style none
-  margin-left: -17px;
+  margin-left: -10px;
 }
 
 .tree input {
@@ -198,7 +198,7 @@ ul {
 .tree li {
   line-height: 1.2;
   position: relative;
-  padding: 0 0 1em 25px;
+  padding: 0 0 1em 20px;
 }
 
 .tree ul li { padding: 1em 0 0 1em; }
@@ -223,10 +223,10 @@ label.tree_label:hover { color: #666; }
 */
 .q-icon
   position: absolute;
-  left: -15px;
+  left: -22px;
   font-size: 24px;
   z-index: 1;
-  margin-top: -5px;
+  margin-top: -8px;
   color: #fcd462;
 //label.tree_label:before {
 //  background: #000;

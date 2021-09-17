@@ -1,10 +1,10 @@
 {
   "name": "common",
-  "version": "1.0.15",
+  "version": "1.0.0",
   "description": "~",
-  "productName": "Tagnos",
-  "cordovaId": "br.com.tagnos",
-  "author": "TDR Informática",
+  "productName": "File Manager",
+  "cordovaId": "",
+  "author": "Hudson Machado",
   "private": true,
   "scripts": {
     "build": "build.sh",
@@ -12,10 +12,7 @@
     "lint": "eslint --ext .js,.vue src",
     "lint-fix": "eslint --ext .js,.vue src --fix",
     "test": "echo \"No test specified\" && exit 0",
-    "transporte": "lerna bootstrap \n cd ../transporte \n quasar dev",
-    "patch-release": "npm version patch && quasar build --watch",
-    "minor-release": "npm version minor && quasar build --watch",
-    "major-release": "npm version major && quasar build --watch"
+    "transporte": "lerna bootstrap \n cd ../transporte \n quasar dev"
   },
   "dependencies": {
     "@quasar/app": "^1.2.4",
@@ -28,8 +25,7 @@
     "preload-webpack-plugin": "^2.3.0",
     "quasar": "^1.4.5",
     "vue-i18n": "^8.11.2",
-    "vuelidate": "^0.7.4",
-    "webstomp-client": "^1.2.6"
+    "vuelidate": "^0.7.4"
   },
   "devDependencies": {
     "babel-eslint": "^10.0.2",
