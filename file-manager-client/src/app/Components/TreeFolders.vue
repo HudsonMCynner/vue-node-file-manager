@@ -2,16 +2,15 @@
   <div class="tree-menu">
     <div
       class="label-wrapper"
-      @click="toggleChildren"
     >
       <div
         :style="indent"
         :class="labelClasses"
-        @click="$emit('path', path)"
+        @click="selectNode"
       >
         <q-icon
-          v-if="nodes"
           :name="showChildren ? 'folder_open' : 'folder'"
+          @click="toggleChildren"
         />
         {{ label }}
       </div>
@@ -24,7 +23,7 @@
         :label="node.label"
         :path="node.path"
         :depth="depth + 1"
-        @select="$emit('path')"
+        @path="$emit('path', $event)"
       />
     </template>
   </div>
@@ -66,6 +65,12 @@ export default { // [ 'nodes', 'label', 'depth' ]
     }
   },
   methods: {
+    selectNode () {
+      // if (this.nodes.length && this.depth > 0) {
+      //   return
+      // }
+      this.$emit('path', this.path)
+    },
     toggleChildren () {
       if (!this.nodes.length) {
         return
@@ -86,6 +91,7 @@ export default { // [ 'nodes', 'label', 'depth' ]
     padding 5px
     .q-icon
       font-size 20px
+      color #e7c146
     .has-children
       cursor: pointer;
     &:hover

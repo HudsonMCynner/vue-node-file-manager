@@ -59,12 +59,18 @@ export default class FileListService extends Rest {
   getAllDir () {
     return this.get(`/dirs`)
   }
+  /**
+   * @returns {Promise}
+   */
+  getTotalSizeOfFiles () {
+    return this.get(`/files/total`)
+  }
 
   /**
    * @param path
    * @returns {Promise}
    */
-  getFilesByDir (path = 'F:/uploads') {
+  getFilesByDir (path) {
     return this.get('/files/dir', {
       params: {
         path

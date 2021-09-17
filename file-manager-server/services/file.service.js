@@ -43,7 +43,7 @@ module.exports = {
         res.send(getDirectories(fileConfig.uploadsFolder));
     },
     getFilesByDir: (req, res, next) => {
-        File.find({ path: req.query.path }, (err, files) => {
+        File.find({ path: req.query.path || fileConfig.uploadsFolder }, (err, files) => {
             if (err) {
                 return res.status(404).end();
             }
@@ -57,6 +57,15 @@ module.exports = {
             }
             console.log('File fetched successfully');
             res.send(files);
+        });
+    },
+    getTotalOfFiles: (req, res, next) => {
+        File.find((err, files) => {
+            if (err) {
+                return res.status(404).end();
+            }
+            let total = files.map((file) => file.size).reduce((acc, next) => acc + next)
+            res.send({ total });
         });
     },
     uploadFile: (req, res, next) => {
@@ -73,6 +82,7 @@ module.exports = {
 
                 fileModel.encodedName = btoa(fileModel._id)
                 fileModel.path = req.folderPath || fileConfig.uploadsFolder
+                fileModel.size = file.size
                 fileModel.save((err) => {
                     if (err) {
                         return next('Error creating new file', err);

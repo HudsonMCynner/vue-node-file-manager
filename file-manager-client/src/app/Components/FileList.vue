@@ -63,6 +63,9 @@
             <th class="style-th">
               Nome
             </th>
+            <td class="style-th">
+              Tamanho
+            </td>
             <th />
           </tr>
         </thead>
@@ -81,6 +84,12 @@
             </td>
             <td class="style-td">
               {{ file.name }}
+            </td>
+            <td
+              class="style-td"
+              style="width: 90px"
+            >
+              {{ kbToMb(file.size) }}
             </td>
             <td
               class="style-td"
@@ -110,16 +119,12 @@ export default {
   mixins: [file],
   props: {
     value: {
-      type: Object,
-      default: () => ({})
+      type: Array,
+      default: () => ([])
     }
   },
   created () {
-    this.model = this.value
-    FileService.build().getAllFiles()
-      .then((response) => {
-        this.files = response
-      })
+    this.files = this.value
   },
   data: () => ({
     inputUpload: {
@@ -239,7 +244,7 @@ export default {
   watch: {
     value: {
       handler (value) {
-        this.model = value
+        this.files = value
       },
       deep: true
     }

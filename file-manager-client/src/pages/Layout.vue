@@ -22,6 +22,7 @@
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
+      :width="220"
       bordered
     >
       <q-list>
@@ -31,23 +32,63 @@
           Essential Links
         </q-item-label>
 
-        <navigator />
+        <navigator
+          @path:selected="getFilesByDir"
+          :value="nodes"
+        />
       </q-list>
     </q-drawer>
 
     <q-page-container>
-      <file-list />
+      <file-list
+        :value="files"
+        :path="path"
+      />
     </q-page-container>
   </q-layout>
 </template>
 
 <script type="text/javascript">
+import FileService from 'src/service/FileListService'
+
 export default {
   name: 'LayoutDashboard',
   data: () => ({
-    leftDrawerOpen: false
+    leftDrawerOpen: false,
+    nodes: [],
+    files: [],
+    path: ''
   }),
+  created () {
+    FileService.build().getAllDir()
+      .then((response) => {
+        this.nodes = response.map((item) => {
+          return {
+            ...item,
+            icon: 'folder'
+          }
+        })
+      })
+    FileService.build().getAllFiles()
+      .then((response) => {
+        this.files = response
+      })
+    FileService.build().getTotalSizeOfFiles()
+      .then((response) => {
+        console.log('~> ', this.kbToMb(response.total))
+      })
+  },
   methods: {
+    kbToMb (kbts) {
+      return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
+    },
+    getFilesByDir (path) {
+      this.path = path
+      FileService.build().getFilesByDir(path)
+        .then((response) => {
+          this.files = response
+        })
+    },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     }

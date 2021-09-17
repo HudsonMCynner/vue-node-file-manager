@@ -4,12 +4,12 @@
       ref="filter"
       outlined
       dense
-      v-model="filter"
+      v-model="pesquisa"
       placeholder="Pesquisar"
     >
       <template v-slot:append>
         <q-icon
-          v-if="filter !== ''"
+          v-if="pesquisa !== ''"
           name="clear"
           class="cursor-pointer"
           @click="resetFilter"
@@ -18,49 +18,72 @@
     </q-input>
     <tree-folders
       :root="true"
-      :nodes="tree.nodes"
+      :nodes="getMenus"
       :depth="0"
-      :label="tree.label"
+      :label="label"
+      @path="getFilesByPath"
     />
   </div>
 </template>
 
 <script>
-import FileService from 'src/service/FileListService'
 
 export default {
   name: 'Navigator',
+  props: {
+    value: {
+      type: Array,
+      default: () => []
+    }
+  },
   created () {
-    FileService.build().getAllDir()
-      .then((response) => {
-        this.tree.nodes = response.map((item) => {
-          return {
-            ...item,
-            icon: 'folder'
-          }
-        })
-      })
-    FileService.build().getFilesByDir()
-      .then((response) => {
-        console.log('~> ', response)
-      })
+    this.nodes = this.value
   },
   data () {
     return {
-      tree: {
-        label: 'Pastas',
-        nodes: []
-      },
-      filter: ''
+      label: 'Pastas',
+      nodes: [],
+      pesquisa: ''
     }
   },
   methods: {
-    update (event) {
-      console.log('~> ', event)
+    getFilesByPath (event) {
+      this.$emit('path:selected', event)
+    },
+    filter (arr, term) {
+      let matches = []
+      if (!Array.isArray(arr)) {
+        return matches
+      }
+      arr.forEach((item) => {
+        if (item.label.toLowerCase().includes(term.toLowerCase())) {
+          matches.push(item)
+        }
+        else {
+          let childResults = this.filter(item.children, term)
+          if (childResults.length) {
+            matches.push(Object.assign({}, item, { children: childResults }))
+          }
+        }
+      })
+      return matches
     },
     resetFilter () {
-      this.filter = ''
+      this.pesquisa = ''
       this.$refs.filter.focus()
+    }
+  },
+  watch: {
+    value: {
+      handler (value) {
+        this.nodes = value
+      },
+      deep: true
+    }
+  },
+  computed: {
+    getMenus () {
+      return this.pesquisa ? this.filter(this.nodes, this.pesquisa) : this.nodes
     }
   }
 }

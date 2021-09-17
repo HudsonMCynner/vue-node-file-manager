@@ -3,6 +3,7 @@ module.exports = {
       'text/csv': 'csv',
       'image/jpg': 'jpg',
       'image/jpeg': 'jpeg',
+      'image/png': 'png',
       'application/zip': 'zip',
       'video/mp4': 'mp4'
     },

@@ -3,7 +3,7 @@
     <q-ajax-bar
       ref="bar"
       position="top"
-      color="primary"
+      color="purple"
       size="5px"
       @start="$q.loading.show()"
       @stop="$q.loading.hide()"
