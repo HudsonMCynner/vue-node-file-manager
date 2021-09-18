@@ -3,7 +3,6 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
-          v-if="false"
           flat
           dense
           round
@@ -29,6 +28,10 @@
         @path:selected="getFilesByDir"
         :value="nodes"
       />
+      <storage-info
+        :value="armazenamento"
+        style="position: absolute; bottom: 10px; width: 100%;"
+      />
     </q-drawer>
 
     <q-page-container>
@@ -42,14 +45,17 @@
 
 <script type="text/javascript">
 import FileService from 'src/service/FileListService'
+import StorageInfo from 'src/app/Components/StorageInfo'
 
 export default {
   name: 'LayoutDashboard',
+  components: { StorageInfo },
   data: () => ({
     leftDrawerOpen: false,
     nodes: [],
     files: [],
-    path: ''
+    path: '',
+    armazenamento: 0
   }),
   created () {
     FileService.build().getAllDir()
@@ -66,7 +72,7 @@ export default {
       })
     FileService.build().getTotalSizeOfFiles()
       .then((response) => {
-        console.log('~> ', this.kbToMb(response.total))
+        this.armazenamento = response.total
       })
   },
   methods: {
