@@ -49,11 +49,4 @@ export default {
   lang="stylus"
   scoped
 >
->>>.tree-anchor
-  .tree-icon.tree-themeicon.fa.fa-folder
-    display none
-  .tree-icon.tree-themeicon.fa.fa-warning
-    display none
-  .tree-icon.tree-themeicon.fa.fa-check
-    display none
 </style>

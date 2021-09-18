@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="false"
           flat
           dense
           round
@@ -24,18 +25,10 @@
       show-if-above
       bordered
     >
-      <q-list>
-        <q-item-label
-          header
-        >
-          Essential Links
-        </q-item-label>
-
-        <navigator
-          @path:selected="getFilesByDir"
-          :value="nodes"
-        />
-      </q-list>
+      <navigator
+        @path:selected="getFilesByDir"
+        :value="nodes"
+      />
     </q-drawer>
 
     <q-page-container>
@@ -62,14 +55,10 @@ export default {
     FileService.build().getAllDir()
       .then((response) => {
         this.nodes = [{
+          selected: true,
           label: 'Home',
           path: ''
-        }].concat(response.map((item) => {
-          return {
-            ...item,
-            'icon': 'fa fa-folder'
-          }
-        }))
+        }].concat(response)
       })
     FileService.build().getAllFiles()
       .then((response) => {
