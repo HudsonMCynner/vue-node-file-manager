@@ -9,7 +9,7 @@
         @click="selectNode"
       >
         <q-icon
-          :name="showChildren ? 'folder_open' : 'folder'"
+          :name="nodes.length ? showChildren ? 'keyboard_arrow_down' : 'navigate_next' : 'folder'"
           @click="toggleChildren"
         />
         {{ label }}

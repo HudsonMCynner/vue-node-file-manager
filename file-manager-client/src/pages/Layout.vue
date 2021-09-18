@@ -22,7 +22,6 @@
     <q-drawer
       v-model="leftDrawerOpen"
       show-if-above
-      :width="220"
       bordered
     >
       <q-list>
@@ -62,12 +61,15 @@ export default {
   created () {
     FileService.build().getAllDir()
       .then((response) => {
-        this.nodes = response.map((item) => {
+        this.nodes = [{
+          label: 'Home',
+          path: ''
+        }].concat(response.map((item) => {
           return {
             ...item,
-            icon: 'folder'
+            'icon': 'fa fa-folder'
           }
-        })
+        }))
       })
     FileService.build().getAllFiles()
       .then((response) => {
@@ -82,9 +84,9 @@ export default {
     kbToMb (kbts) {
       return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
     },
-    getFilesByDir (path) {
-      this.path = path
-      FileService.build().getFilesByDir(path)
+    getFilesByDir (folder) {
+      this.path = folder.path
+      FileService.build().getFilesByDir(folder.path)
         .then((response) => {
           this.files = response
         })

@@ -70,7 +70,7 @@ module.exports = function (ctx) {
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
           'vue$': 'vue/dist/vue.esm.js',
-          'file-manager': path.resolve(__dirname, './file-manager')
+          'src': path.resolve(__dirname, './src')
         }
       },
       env: env

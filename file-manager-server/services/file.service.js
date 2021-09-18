@@ -121,16 +121,16 @@ module.exports = {
                     let fileName = originalname + '-' + (new Date()).getMilliseconds() + '.' + extension
                     cb(null, fileName)
                 }
-            }),
-            fileFilter: (req, file, cb) => {
-                let extension = fileConfig.supportedMimes[file.mimetype]
-
-                if (!extension) {
-                    return cb(null, false)
-                } else {
-                    cb(null, true)
-                }
-            }
+            })
+            // fileFilter: (req, file, cb) => {
+            //     let extension = fileConfig.supportedMimes[file.mimetype] // validação de tipo
+            //
+            //     if (!extension) {
+            //         return cb(null, false)
+            //     } else {
+            //         cb(null, true)
+            //     }
+            // }
         }
     },
     downloadFile (req, res, next) {

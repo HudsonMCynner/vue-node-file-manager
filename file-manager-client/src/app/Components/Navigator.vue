@@ -16,20 +16,26 @@
         />
       </template>
     </q-input>
-    <tree-folders
-      :root="true"
-      :nodes="getMenus"
-      :depth="0"
-      :label="label"
-      @path="getFilesByPath"
+    <!--    <tree-folders-->
+    <!--      :root="true"-->
+    <!--      :nodes="getMenus"-->
+    <!--      :depth="0"-->
+    <!--      :label="label"-->
+    <!--      @path="getFilesByPath"-->
+    <!--    />-->
+    <vue-tree-j-s
+      :value="getMenus"
+      @folder:selected="itemClick"
     />
   </div>
 </template>
 
 <script>
 
+import VueTreeJS from 'src/app/Components/VueTreeJS'
 export default {
   name: 'Navigator',
+  components: { VueTreeJS },
   props: {
     value: {
       type: Array,
@@ -47,8 +53,8 @@ export default {
     }
   },
   methods: {
-    getFilesByPath (event) {
-      this.$emit('path:selected', event)
+    itemClick (node) {
+      this.$emit('path:selected', node.model)
     },
     filter (arr, term) {
       let matches = []
