@@ -20,7 +20,7 @@
           <q-item
             clickable
             v-close-popup
-            @click="selectFiles"
+            @click="modalUpload = true"
           >
             <q-item-section>
               <q-item-label>Enviar</q-item-label>
@@ -39,7 +39,12 @@
           </q-item>
         </q-list>
       </q-btn-dropdown>
-      <modal-upload />
+      <modal-upload
+        :folder-path="folderPath"
+        @upload:end="updateList"
+        :value="modalUpload"
+        @close="modalUpload = false"
+      />
     </div>
     <div class="file-list-content tableFixHead">
       <table class="style-table">
@@ -132,11 +137,10 @@ export default {
     model: null,
     selected: [],
     files: [],
-    selectMode: 'multiple' // single | multiple
+    selectMode: 'multiple', // single | multiple
+    modalUpload: false
   }),
   methods: {
-    selectFiles () {
-    },
     kbToMb (kbts) {
       return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
     },

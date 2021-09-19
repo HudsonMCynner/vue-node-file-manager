@@ -27,8 +27,25 @@ export default {
         document.body.appendChild(element)
       })
     },
-    kbToMb (kbts) {
-      return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
+    kbToMb (bytes) {
+      if (bytes >= 1073741824) {
+        return (bytes / 1073741824).toFixed(2) + ' GB'
+      }
+      if (bytes >= 1048576) {
+        return (bytes / 1048576).toFixed(2) + ' MB'
+      }
+      if (bytes >= 1024) {
+        return (bytes / 1024).toFixed(2) + ' KB'
+      }
+      if (bytes > 1) {
+        return bytes + ' bytes'
+      }
+      if (bytes === 1) {
+        return bytes + ' byte'
+      }
+      else {
+        return '0 bytes'
+      }
     }
   }
 }
