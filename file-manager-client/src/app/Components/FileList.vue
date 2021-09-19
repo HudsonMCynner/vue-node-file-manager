@@ -176,7 +176,7 @@ export default {
     },
     selectFiles () {
       this.getFile(true, false).then((files) => {
-        FileService.build().uploadFiles(files, this.folderPath)
+        FileService.build().uploadFiles(files, this.folderPath, this)
           .then(this.updateList)
       })
     },
@@ -187,7 +187,7 @@ export default {
         }
         let folder = files[0].webkitRelativePath.split('/')[0]
         console.log('~> ', folder)
-        FileService.build().uploadFiles(files, this.folderPath)
+        FileService.build().uploadFiles(files, this.folderPath, this)
           .then(this.updateList)
       })
     },

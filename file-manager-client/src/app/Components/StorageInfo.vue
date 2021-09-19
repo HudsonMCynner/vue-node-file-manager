@@ -4,7 +4,8 @@
     <div class="storage-device">
       <div
         class="progress"
-        :style="{width: getWidth }"
+        :class="{'over-width': getWidth > 100 }"
+        :style="{width: `${getWidth}%` }"
       />
     </div>
     <label>{{ getLivres }} livre(s) de {{ kbToMb(limit) }}</label>
@@ -48,7 +49,7 @@ export default {
   },
   computed: {
     getWidth () {
-      return `${this.value / this.limit * 100}%`
+      return (this.value / this.limit) * 100
     },
     getLivres () {
       return this.kbToMb(this.limit - this.value)
@@ -71,4 +72,7 @@ export default {
     .progress
       background #26a0da
       height 100%
+      max-width 100%
+    .over-width
+      background #ad0c0c
 </style>
