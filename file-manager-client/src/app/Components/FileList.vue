@@ -11,34 +11,18 @@
           <q-icon name="search" />
         </template>
       </q-input>
-      <q-btn-dropdown
+      <q-btn
+        outline
+        icon="file_upload"
         color="primary"
-        label="Ações"
-        size="sm"
-      >
-        <q-list>
-          <q-item
-            clickable
-            v-close-popup
-            @click="modalUpload = true"
-          >
-            <q-item-section>
-              <q-item-label>Enviar</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item
-            v-if="selected.length"
-            clickable
-            v-close-popup
-            @click="removeFile"
-          >
-            <q-item-section>
-              <q-item-label>Excluir Selecionados</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
+        @click="modalUpload = true"
+      />
+      <q-btn
+        outline
+        icon="delete"
+        color="primary"
+        @click="removeFile"
+      />
       <modal-upload
         :folder-path="folderPath"
         @upload:end="updateList"
@@ -160,6 +144,9 @@ export default {
       link.click()
     },
     removeFile () {
+      if (!this.selected.length) {
+        return this.$notify.info('Selecione os arquivos para excluir.')
+      }
       const removeRecursive = (list, index) => {
         if (index >= list.length) {
           this.selected = []
@@ -254,8 +241,8 @@ export default {
 }
 .file-lista-container .file-list-header {
   display: grid;
-  grid-template-columns: 1fr 130px;
-  grid-gap: 10px;
+  grid-template-columns: 1fr 50px 50px;
+  grid-column-gap: 10px;
   padding: 5px;
 }
 .style-table {

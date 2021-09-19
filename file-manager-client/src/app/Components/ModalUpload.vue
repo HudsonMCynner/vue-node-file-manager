@@ -122,7 +122,7 @@ export default {
     this.$root.$on('app:progress', this.progressbar)
   },
   destroyed () {
-    // this.$root.$off('app:progress')
+    this.$root.$off('app:progress')
   },
   data: () => ({
     progress: 0.4,
