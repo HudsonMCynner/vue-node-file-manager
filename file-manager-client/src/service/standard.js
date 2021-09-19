@@ -40,37 +40,6 @@ const responseError = function (error) {
   if (!error.response) {
     return Promise.reject(error)
   }
-  //
-  // if (error.response.status === 423) {
-  //   let data = JSON.parse(error.response.data)
-  //   info('', data.message)
-  //   $router.push('/auth/login')
-  //   return Promise.reject(error)
-  // }
-  //
-  // if (error.response.status === 426) {
-  //   let data = JSON.parse(error.response.data)
-  //   info('', data.message)
-  //     .then(() => {
-  //       window.location.reload(true)
-  //     })
-  //   return Promise.reject(error)
-  // }
-  //
-  // if (error.response.status === 401) {
-  //   let data = JSON.parse(error.response.data)
-  //   info('', data.message)
-  //   $router.push('/auth/login')
-  // }
-  //
-  // if (error.response.status === 403) {
-  //   info('', lang('prototype.request.forbidden.message'))
-  //   return Promise.reject(JSON.parse(error.response.data))
-  // }
-  //
-  // if (error.response.data) {
-  //   return Promise.reject(JSON.parse(error.response.data))
-  // }
 
   return Promise.reject(error)
 }

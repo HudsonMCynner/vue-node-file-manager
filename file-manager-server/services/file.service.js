@@ -64,7 +64,7 @@ module.exports = {
             if (err) {
                 return res.status(404).end();
             }
-            let total = files.map((file) => file.size).reduce((acc, next) => acc + next)
+            let total = files.length ? files.map((file) => file.size).reduce((acc, next) => acc + next) : 0
             res.send({ total });
         });
     },
@@ -81,8 +81,9 @@ module.exports = {
                 }
 
                 fileModel.encodedName = btoa(fileModel._id)
-                fileModel.path = req.folderPath || fileConfig.uploadsFolder
+                fileModel.path = req.body.folderPath || fileConfig.uploadsFolder
                 fileModel.size = file.size
+                fileModel.mimetype = file.mimetype
                 fileModel.save((err) => {
                     if (err) {
                         return next('Error creating new file', err);
@@ -107,7 +108,7 @@ module.exports = {
         return {
             storage: multer.diskStorage({
                 destination:  (req, file, cb) => {
-                    const dir = fileConfig.uploadsFolder
+                    const dir = req.body.folderPath || fileConfig.uploadsFolder
                     fs.exists(dir, exist => {
                         if (!exist) {
                             return fs.mkdir(dir, error => cb(error, dir))
@@ -116,7 +117,9 @@ module.exports = {
                     })
                 },
                 filename: (req, file, cb) => {
-                    let extension = fileConfig.supportedMimes[file.mimetype]
+                    // let extension = fileConfig.supportedMimes[file.mimetype]
+                    let paths = file.originalname.split('.')
+                    let extension = file.originalname.split('.')[paths.length - 1]
                     let originalname = file.originalname.split('.')[0]
                     let fileName = originalname + '-' + (new Date()).getMilliseconds() + '.' + extension
                     cb(null, fileName)
@@ -150,7 +153,7 @@ module.exports = {
                     }
 
                     // let fileLocation = path.join(__dirname, '..', 'uploads', file.name)
-                    let fileLocation = path.join(fileConfig.uploadsFolder, file.name)
+                    let fileLocation = path.join(file.path, file.name)
 
                     res.download(fileLocation, (err) => {
                         if (err) {
@@ -162,7 +165,7 @@ module.exports = {
         })
     },
     deleteFile (req, res, next) {
-        File.findOne({id: req.params._id}, (err, file) => {
+        File.findOne({_id: req.params.id}, (err, file) => {
             if (err) {
                 res.status(400).end();
             }
@@ -172,7 +175,7 @@ module.exports = {
             }
 
             // let fileLocation = path.join(__dirname, '..', 'uploads', file.name)
-            let fileLocation = path.join(fileConfig.uploadsFolder, file.name)
+            let fileLocation = path.join(req.query.folderPath || fileConfig.uploadsFolder, file.name)
             fs.unlink(fileLocation, () => {
                 File.deleteOne(file, (err) => {
                     if (err) {

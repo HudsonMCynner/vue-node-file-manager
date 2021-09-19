@@ -5,6 +5,7 @@ let FileSchema = new Schema({
     name: {type: String, required: true, max: 100},
     encodedName: {type: String, required: false, max: 100, default: null},
     path: {type: String, required: false, max: 100, default: null},
+    mimetype: {type: String, required: false, default: null},
     size: {type: Number, required: false }
 });
 

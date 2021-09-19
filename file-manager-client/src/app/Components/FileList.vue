@@ -50,7 +50,7 @@
         </q-list>
       </q-btn-dropdown>
     </div>
-    <div class="file-list-content">
+    <div class="file-list-content tableFixHead">
       <table class="style-table">
         <thead class="style-thead">
           <tr>
@@ -63,9 +63,9 @@
             <th class="style-th">
               Nome
             </th>
-            <td class="style-th">
+            <th class="style-th">
               Tamanho
-            </td>
+            </th>
             <th />
           </tr>
         </thead>
@@ -121,6 +121,10 @@ export default {
     value: {
       type: Array,
       default: () => ([])
+    },
+    folderPath: {
+      type: String,
+      default: ''
     }
   },
   created () {
@@ -149,30 +153,14 @@ export default {
       link.click()
     },
     removeFile () {
-      if (this.selectMode === 'single') {
-        if (this.selected.length) {
-          FileService.build().deleteFile(this.selected[0]._id)
-            .then(() => {
-              this.$notify.success('Arquivo excluído com sucesso!')
-              this.selected = []
-              FileService.build().getAllFiles()
-                .then((response) => {
-                  this.files = response
-                })
-            })
-        }
-        else {
-          console.log('~> Selecione um arquivo')
-        }
-      }
       const removeRecursive = (list, index) => {
         if (index >= list.length) {
           this.selected = []
           return this.$notify.success('Arquivos excluídos com sucesso!')
         }
-        FileService.build().deleteFile(list[index]._id)
+        FileService.build().deleteFile(list[index]._id, this.folderPath)
           .then(() => {
-            FileService.build().getAllFiles()
+            FileService.build().getFilesByDir(this.folderPath)
               .then((response) => {
                 this.files = response
                 removeRecursive(list, (index + 1))
@@ -183,9 +171,9 @@ export default {
     },
     selectFiles () {
       this.getFile(true, false).then((files) => {
-        FileService.build().uploadFiles(files)
+        FileService.build().uploadFiles(files, this.folderPath)
           .then(() => {
-            FileService.build().getAllFiles()
+            FileService.build().getFilesByDir(this.folderPath)
               .then((response) => {
                 this.files = response
               })
@@ -261,6 +249,22 @@ export default {
   lang="stylus"
   scoped
 >
+.tableFixHead
+  border 1px solid #b1b1b1
+  border-radius 3px
+  overflow-y: auto;
+  height: calc(100vh - 120px);
+
+.tableFixHead::-webkit-scrollbar-track
+  border-radius 0
+
+.tableFixHead thead th
+  background white !important
+  color black !important
+  z-index 1
+  position: sticky !important
+  top: 0 !important
+
 .file-lista-container {
   padding: 5px;
   display: grid;

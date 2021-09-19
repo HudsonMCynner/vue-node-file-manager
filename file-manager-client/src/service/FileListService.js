@@ -30,11 +30,14 @@ export default class FileListService extends Rest {
 
   /**
    * @param files
+   * @param folderPath
    * @returns {Promise}
    */
-  uploadFiles (files) {
+  uploadFiles (files, folderPath) {
     let formData = new FormData()
+    formData.append('folderPath', folderPath)
     for (let index = 0; index < files.length; index++) {
+      debugger
       formData.append(files[index].name, files[index], files[index].name)
     }
     return this.post('/upload', formData)
@@ -42,10 +45,15 @@ export default class FileListService extends Rest {
 
   /**
    * @param fileId
+   * @param folderPath
    * @returns {Promise}
    */
-  deleteFile (fileId) {
-    return this.delete(`/files/${fileId}`)
+  deleteFile (fileId, folderPath) {
+    return this.delete(`/files/${fileId}`, {
+      params: {
+        folderPath
+      }
+    })
   }
 
   /**

@@ -5,7 +5,8 @@ module.exports = {
       'image/jpeg': 'jpeg',
       'image/png': 'png',
       'application/zip': 'zip',
-      'video/mp4': 'mp4'
+      'video/mp4': 'mp4',
+      'application/pdf': 'pdf'
     },
     maxFileSize: '2GB',
     uploadsFolder: 'F:/uploads',

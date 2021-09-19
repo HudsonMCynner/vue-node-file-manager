@@ -37,7 +37,7 @@
     <q-page-container>
       <file-list
         :value="files"
-        :path="path"
+        :folder-path="folderPath"
       />
     </q-page-container>
   </q-layout>
@@ -54,7 +54,7 @@ export default {
     leftDrawerOpen: false,
     nodes: [],
     files: [],
-    path: '',
+    folderPath: '',
     armazenamento: 0
   }),
   created () {
@@ -66,7 +66,7 @@ export default {
           path: ''
         }].concat(response)
       })
-    FileService.build().getAllFiles()
+    FileService.build().getFilesByDir(this.folderPath)
       .then((response) => {
         this.files = response
       })
@@ -80,7 +80,7 @@ export default {
       return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
     },
     getFilesByDir (folder) {
-      this.path = folder.path
+      this.folderPath = folder.path
       FileService.build().getFilesByDir(folder.path)
         .then((response) => {
           this.files = response
