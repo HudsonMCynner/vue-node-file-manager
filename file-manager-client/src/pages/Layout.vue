@@ -15,7 +15,7 @@
           Gerenciador de Arquivos
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>v1.0.0</div>
       </q-toolbar>
     </q-header>
 
@@ -62,9 +62,11 @@ export default {
       .then((response) => {
         this.nodes = [{
           selected: true,
-          label: 'Home',
-          path: ''
-        }].concat(response)
+          opened: true,
+          label: 'Meu Drive',
+          path: '',
+          children: response
+        }]
       })
     FileService.build().getFilesByDir(this.folderPath)
       .then((response) => {

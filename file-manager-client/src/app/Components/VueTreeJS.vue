@@ -26,6 +26,12 @@ export default {
     this.model = this.value
   },
   data: () => ({
+    root: [{
+      selected: true,
+      label: 'Meu Drive',
+      path: '',
+      children: []
+    }],
     model: []
   }),
   methods: {
@@ -36,9 +42,7 @@ export default {
   watch: {
     value: {
       handler (value) {
-        setTimeout(() => {
-          this.model = value
-        }, 1000)
+        this.model = value
       }
     }
   }

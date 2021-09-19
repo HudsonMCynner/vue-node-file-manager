@@ -187,9 +187,9 @@ export default {
         }
         let folder = files[0].webkitRelativePath.split('/')[0]
         console.log('~> ', folder)
-        FileService.build().uploadFiles(files)
+        FileService.build().uploadFiles(files, this.folderPath)
           .then(() => {
-            FileService.build().getAllFiles()
+            FileService.build().getFilesByDir(this.folderPath)
               .then((response) => {
                 this.files = response
               })
@@ -235,6 +235,9 @@ export default {
         this.files = value
       },
       deep: true
+    },
+    folderPath () {
+      this.selected = []
     }
   },
   computed: {
