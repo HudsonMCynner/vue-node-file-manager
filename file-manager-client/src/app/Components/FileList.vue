@@ -23,17 +23,7 @@
             @click="selectFiles"
           >
             <q-item-section>
-              <q-item-label>Enviar Arquivos</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item
-            clickable
-            v-close-popup
-            @click="selectFolder"
-          >
-            <q-item-section>
-              <q-item-label>Enviar Pasta</q-item-label>
+              <q-item-label>Enviar</q-item-label>
             </q-item-section>
           </q-item>
 
@@ -49,6 +39,7 @@
           </q-item>
         </q-list>
       </q-btn-dropdown>
+      <modal-upload />
     </div>
     <div class="file-list-content tableFixHead">
       <table class="style-table">
@@ -112,11 +103,11 @@
 
 <script>
 import FileService from 'src/service/FileListService'
-import file from './mixins/file'
+import ModalUpload from 'src/app/Components/ModalUpload'
 
 export default {
   name: 'FileList',
-  mixins: [file],
+  components: { ModalUpload },
   props: {
     value: {
       type: Array,
@@ -144,6 +135,11 @@ export default {
     selectMode: 'multiple' // single | multiple
   }),
   methods: {
+    selectFiles () {
+    },
+    kbToMb (kbts) {
+      return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
+    },
     updateList () {
       FileService.build().getFilesByDir(this.folderPath)
         .then((response) => {
@@ -173,23 +169,6 @@ export default {
           })
       }
       removeRecursive(this.selected, 0)
-    },
-    selectFiles () {
-      this.getFile(true, false).then((files) => {
-        FileService.build().uploadFiles(files, this.folderPath, this)
-          .then(this.updateList)
-      })
-    },
-    selectFolder () {
-      this.getFile(false, true).then((files) => {
-        if (!files.length) {
-          return this.$notify.info('Nenhum arquivo selecionado')
-        }
-        let folder = files[0].webkitRelativePath.split('/')[0]
-        console.log('~> ', folder)
-        FileService.build().uploadFiles(files, this.folderPath, this)
-          .then(this.updateList)
-      })
     },
     selectFile (file) {
       const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
