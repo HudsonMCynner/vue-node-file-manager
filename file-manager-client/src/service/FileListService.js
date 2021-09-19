@@ -74,6 +74,15 @@ export default class FileListService extends Rest {
   }
 
   /**
+   * @param base
+   * @param children
+   * @returns {Promise}
+   */
+  createDirectory (base, children) {
+    return this.post(`/dirs/create`, { base, children })
+  }
+
+  /**
    * @param path
    * @returns {Promise}
    */

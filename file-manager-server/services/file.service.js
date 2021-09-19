@@ -28,6 +28,22 @@ module.exports = {
             mkdir(`${base}/${path}`)
         })
     },
+    createDirectoryFolder: (req, res, next) => {
+        const mkdir = (dir) => {
+            fs.exists(dir, exist => {
+                if (!exist) {
+                    return fs.mkdir(dir, error => {
+                        if (error) {
+                            return res.status(500).end()
+                        }
+                        return res.send({ dir })
+                    })
+                }
+                return dir
+            })
+        }
+        mkdir(`${req.body.base.base || fileConfig.uploadsFolder}/${req.body.base.children}`)
+    },
     getDir: (req, res, next) => {
         const getDirectories = (source) => {
             return readdirSync(source, { withFileTypes: true })

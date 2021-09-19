@@ -11,5 +11,6 @@ router.post('/upload', multer.any(), fileService.uploadFile);
 router.delete('/files/:id', fileService.deleteFile);
 router.get('/files/dir/', fileService.getFilesByDir);
 router.get('/files/total', fileService.getTotalOfFiles);
+router.post('/dirs/create/', fileService.createDirectoryFolder);
 
 module.exports = router;

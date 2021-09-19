@@ -16,16 +16,10 @@
         />
       </template>
     </q-input>
-    <!--    <tree-folders-->
-    <!--      :root="true"-->
-    <!--      :nodes="getMenus"-->
-    <!--      :depth="0"-->
-    <!--      :label="label"-->
-    <!--      @path="getFilesByPath"-->
-    <!--    />-->
     <vue-tree-j-s
       :value="getMenus"
       @folder:selected="itemClick"
+      @create:folder="newFolder"
     />
   </div>
 </template>
@@ -53,6 +47,9 @@ export default {
     }
   },
   methods: {
+    newFolder (event) {
+      this.$emit('create:folder', event)
+    },
     itemClick (node) {
       this.$emit('path:selected', node.model)
     },

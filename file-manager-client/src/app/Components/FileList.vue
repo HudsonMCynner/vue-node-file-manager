@@ -144,6 +144,13 @@ export default {
     selectMode: 'multiple' // single | multiple
   }),
   methods: {
+    updateList () {
+      FileService.build().getFilesByDir(this.folderPath)
+        .then((response) => {
+          this.$emit('update:list')
+          this.files = response
+        })
+    },
     downloadFile ({ encodedName, name }) {
       let base = 'http://localhost:3000'
       const link = document.createElement('a')
@@ -156,15 +163,13 @@ export default {
       const removeRecursive = (list, index) => {
         if (index >= list.length) {
           this.selected = []
+          this.updateList()
           return this.$notify.success('Arquivos excluídos com sucesso!')
         }
         FileService.build().deleteFile(list[index]._id, this.folderPath)
           .then(() => {
             FileService.build().getFilesByDir(this.folderPath)
-              .then((response) => {
-                this.files = response
-                removeRecursive(list, (index + 1))
-              })
+              .then(removeRecursive(list, (index + 1)))
           })
       }
       removeRecursive(this.selected, 0)
@@ -172,12 +177,7 @@ export default {
     selectFiles () {
       this.getFile(true, false).then((files) => {
         FileService.build().uploadFiles(files, this.folderPath)
-          .then(() => {
-            FileService.build().getFilesByDir(this.folderPath)
-              .then((response) => {
-                this.files = response
-              })
-          })
+          .then(this.updateList)
       })
     },
     selectFolder () {
@@ -188,12 +188,7 @@ export default {
         let folder = files[0].webkitRelativePath.split('/')[0]
         console.log('~> ', folder)
         FileService.build().uploadFiles(files, this.folderPath)
-          .then(() => {
-            FileService.build().getFilesByDir(this.folderPath)
-              .then((response) => {
-                this.files = response
-              })
-          })
+          .then(this.updateList)
       })
     },
     selectFile (file) {

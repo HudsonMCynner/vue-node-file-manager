@@ -26,6 +26,7 @@
     >
       <navigator
         @path:selected="getFilesByDir"
+        @create:folder="createFolder"
         :value="nodes"
       />
       <storage-info
@@ -38,6 +39,7 @@
       <file-list
         :value="files"
         :folder-path="folderPath"
+        @update:list="getStorageUsage"
       />
     </q-page-container>
   </q-layout>
@@ -58,26 +60,36 @@ export default {
     armazenamento: 0
   }),
   created () {
-    FileService.build().getAllDir()
-      .then((response) => {
-        this.nodes = [{
-          selected: true,
-          opened: true,
-          label: 'Meu Drive',
-          path: '',
-          children: response
-        }]
-      })
+    this.updateDirectories()
     FileService.build().getFilesByDir(this.folderPath)
       .then((response) => {
         this.files = response
       })
-    FileService.build().getTotalSizeOfFiles()
-      .then((response) => {
-        this.armazenamento = response.total
-      })
+    this.getStorageUsage()
   },
   methods: {
+    updateDirectories () {
+      FileService.build().getAllDir()
+        .then((response) => {
+          this.nodes = [{
+            selected: true,
+            opened: true,
+            label: 'Meu Drive',
+            path: '',
+            children: response
+          }]
+        })
+    },
+    createFolder (event) {
+      FileService.build().createDirectory(event)
+        .then(this.updateDirectories)
+    },
+    getStorageUsage () {
+      FileService.build().getTotalSizeOfFiles()
+        .then((response) => {
+          this.armazenamento = response.total
+        })
+    },
     kbToMb (kbts) {
       return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
     },
