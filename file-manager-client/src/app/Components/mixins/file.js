@@ -28,6 +28,9 @@ export default {
       })
     },
     kbToMb (bytes) {
+      if (typeof bytes !== 'number') {
+        return ''
+      }
       if (bytes >= 1073741824) {
         return (bytes / 1073741824).toFixed(2) + ' GB'
       }

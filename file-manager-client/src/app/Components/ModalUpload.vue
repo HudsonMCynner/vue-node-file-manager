@@ -16,6 +16,7 @@
               outline
               label="Pasta"
               color="primary"
+              @click="selectFolder"
             />
             <q-btn
               outline
@@ -55,8 +56,8 @@
           >
             <div class="file-info">
               <span class="file-name">{{ file.file.name }}</span>
-              <!--              <span class="file-size-progress">{{ file.size }}</span>-->
-              <span class="file-size">{{ kbToMb(file.file.size) }}</span>
+              <!--                            <span class="file-size-progress">{{ file.loaded }}</span>-->
+              <span class="file-size">{{ kbToMb(file.loaded) }} / {{ kbToMb(file.file.size) }}</span>
             </div>
             <div class="progress-content">
               <div class="progress">
@@ -140,6 +141,7 @@ export default {
           this.uploadEnd()
           return
         }
+        this.enviados = index
         this.actualUpload = index
         FileService.build().uploadFiles([list[index].file], this.folderPath, this)
           .then(() => sendFileRecursive(list, (index + 1)))
@@ -165,25 +167,36 @@ export default {
         this.files = Array.from(files).map((file) => {
           return {
             file,
-            progress: 0
+            progress: 0,
+            loaded: '-'
           }
         })
       })
     },
     selectFolder () {
       this.getFile(false, true).then((files) => {
-        if (!files.length) {
-          return this.$notify.info('Nenhum arquivo selecionado')
-        }
-        let folder = files[0].webkitRelativePath.split('/')[0]
-        console.log('~> ', folder)
-        FileService.build().uploadFiles(files, this.folderPath, this)
-          .then(this.updateList)
+        this.files = Array.from(files).map((file) => {
+          return {
+            file,
+            progress: 0,
+            loaded: '-'
+          }
+        })
       })
+      // this.getFile(false, true).then((files) => {
+      //   if (!files.length) {
+      //     return this.$notify.info('Nenhum arquivo selecionado')
+      //   }
+      //   let folder = files[0].webkitRelativePath.split('/')[0]
+      //   console.log('~> ', folder)
+      //   FileService.build().uploadFiles(files, this.folderPath, this)
+      //     .then(this.updateList)
+      // })
     },
-    progressbar (progress) {
-      console.log('~> ', progress)
-      this.files[this.actualUpload].progress = (progress * 100).toFixed(2)
+    progressbar ({ percent, loaded }) {
+      // console.log('~> ', percent)
+      this.files[this.actualUpload].progress = (percent * 100).toFixed(2)
+      this.files[this.actualUpload].loaded = loaded // bytes loaded
     }
   },
   watch: {

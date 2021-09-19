@@ -42,8 +42,8 @@ export default class FileListService extends Rest {
     }
     return this.post('/upload', formData, {
       onUploadProgress: (progressEvent) => {
-        console.log('~> Service', (progressEvent.loaded / progressEvent.total))
-        scopeVue.$root.$emit('app:progress', (progressEvent.loaded / progressEvent.total))
+        // console.log('~> Service', (progressEvent.loaded / progressEvent.total))
+        scopeVue.$root.$emit('app:progress', { percent: (progressEvent.loaded / progressEvent.total), loaded: progressEvent.loaded })
       }
     })
   }
