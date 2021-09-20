@@ -63,6 +63,7 @@
               <div class="progress">
                 <div
                   class="progress-bar"
+                  :class="{'send-error': file.error }"
                   :style="{ width: `${file.progress}%`}"
                 />
               </div>
@@ -145,6 +146,10 @@ export default {
         this.actualUpload = index
         FileService.build().uploadFiles([list[index].file], this.folderPath, this)
           .then(() => sendFileRecursive(list, (index + 1)))
+          .catch(() => {
+            list[index].erro = true
+            sendFileRecursive(list, (index + 1))
+          })
       }
       sendFileRecursive(this.files, 0)
     },
@@ -168,7 +173,8 @@ export default {
           return {
             file,
             progress: 0,
-            loaded: '-'
+            loaded: '-',
+            error: false
           }
         })
       })
@@ -179,7 +185,8 @@ export default {
           return {
             file,
             progress: 0,
-            loaded: '-'
+            loaded: '-',
+            error: false
           }
         })
       })
@@ -202,6 +209,7 @@ export default {
   watch: {
     value: {
       handler (value) {
+        this.resetData()
         this.model = value
       },
       deep: true
@@ -279,6 +287,9 @@ export default {
             height 100%
             border-radius: 5px;
             background #33ce4f
+          .send-error
+            width 100% !important
+            background #c32c2c !important
     &::-webkit-scrollbar
       display none
 </style>

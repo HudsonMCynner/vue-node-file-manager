@@ -25,7 +25,7 @@
       />
       <modal-upload
         :folder-path="folderPath"
-        @upload:end="updateList"
+        @upload:end="uploadEnd"
         :value="modalUpload"
         @close="modalUpload = false"
       />
@@ -142,6 +142,9 @@ export default {
       link.target = '_blank'
       link.download = name
       link.click()
+    },
+    uploadEnd () {
+      this.updateList()
     },
     removeFile () {
       if (!this.selected.length) {
