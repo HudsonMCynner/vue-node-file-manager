@@ -26,6 +26,7 @@
       <modal-upload
         :folder-path="folderPath"
         @upload:end="uploadEnd"
+        @update:storage="$emit('update:storage')"
         :value="modalUpload"
         @close="modalUpload = false"
       />
@@ -125,8 +126,28 @@ export default {
     modalUpload: false
   }),
   methods: {
-    kbToMb (kbts) {
-      return kbts ? (kbts / (1024 * 1024)).toFixed(2) + 'MB' : ''
+    kbToMb (bytes) {
+      if (typeof bytes !== 'number') {
+        return ''
+      }
+      if (bytes >= 1073741824) {
+        return (bytes / 1073741824).toFixed(2) + ' GB'
+      }
+      if (bytes >= 1048576) {
+        return (bytes / 1048576).toFixed(2) + ' MB'
+      }
+      if (bytes >= 1024) {
+        return (bytes / 1024).toFixed(2) + ' KB'
+      }
+      if (bytes > 1) {
+        return bytes + ' bytes'
+      }
+      if (bytes === 1) {
+        return bytes + ' byte'
+      }
+      else {
+        return '0 bytes'
+      }
     },
     updateList () {
       FileService.build().getFilesByDir(this.folderPath)

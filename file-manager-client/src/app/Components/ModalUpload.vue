@@ -129,8 +129,7 @@ export default {
     progress: 0.4,
     model: false,
     files: [],
-    enviados: 0,
-    actualUpload: 0 // index of upload
+    enviados: 0
   }),
   methods: {
     sendFiles () {
@@ -143,9 +142,15 @@ export default {
           return
         }
         this.enviados = index
-        this.actualUpload = index
-        FileService.build().uploadFiles([list[index].file], this.folderPath, this)
-          .then(() => sendFileRecursive(list, (index + 1)))
+        const updateProgress = (progress) => {
+          list[index].progress = ((progress.loaded / progress.total) * 100).toFixed(2)
+          list[index].loaded = progress.loaded // bytes loaded
+        }
+        FileService.build().uploadFiles([list[index].file], this.folderPath, updateProgress)
+          .then(() => {
+            sendFileRecursive(list, (index + 1))
+            this.$emit('update:storage')
+          })
           .catch(() => {
             list[index].erro = true
             sendFileRecursive(list, (index + 1))
@@ -163,7 +168,6 @@ export default {
     },
     resetData () {
       this.files = []
-      this.actualUpload = 0
       this.enviados = 0
     },
     selectFiles () {
@@ -199,11 +203,6 @@ export default {
       //   FileService.build().uploadFiles(files, this.folderPath, this)
       //     .then(this.updateList)
       // })
-    },
-    progressbar ({ percent, loaded }) {
-      // console.log('~> ', percent)
-      this.files[this.actualUpload].progress = (percent * 100).toFixed(2)
-      this.files[this.actualUpload].loaded = loaded // bytes loaded
     }
   },
   watch: {

@@ -132,4 +132,7 @@ export default {
   width 100%
   height: calc(100vh - 135px);
   padding: 0 10px 0 0;
+>>> .tree-default .tree-node {
+  margin-left: 13px;
+}
 </style>

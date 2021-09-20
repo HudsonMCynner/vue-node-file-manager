@@ -40,6 +40,7 @@
         :value="files"
         :folder-path="folderPath"
         @update:list="getStorageUsage"
+        @update:storage="getStorageUsage"
       />
     </q-page-container>
   </q-layout>

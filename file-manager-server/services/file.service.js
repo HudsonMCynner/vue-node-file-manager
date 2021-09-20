@@ -59,7 +59,9 @@ module.exports = {
         res.send(getDirectories(fileConfig.uploadsFolder));
     },
     getFilesByDir: (req, res, next) => {
-        File.find({ path: req.query.path || fileConfig.uploadsFolder }, (err, files) => {
+        File.find((err, files) => {
+            let path = req.query.path || fileConfig.uploadsFolder
+            files = files.filter((file) => file.path.indexOf(path) > -1)
             if (err) {
                 return res.status(404).end();
             }

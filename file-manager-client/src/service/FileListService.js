@@ -31,20 +31,17 @@ export default class FileListService extends Rest {
   /**
    * @param files
    * @param folderPath
-   * @param scopeVue
+   * @param onUploadProgressCallback
    * @returns {Promise}
    */
-  uploadFiles (files, folderPath, scopeVue) {
+  uploadFiles (files, folderPath, onUploadProgressCallback) {
     let formData = new FormData()
     formData.append('folderPath', folderPath)
     for (let index = 0; index < files.length; index++) {
       formData.append(files[index].name, files[index], files[index].name)
     }
     return this.post('/upload', formData, {
-      onUploadProgress: (progressEvent) => {
-        // console.log('~> Service', (progressEvent.loaded / progressEvent.total))
-        scopeVue.$root.$emit('app:progress', { percent: (progressEvent.loaded / progressEvent.total), loaded: progressEvent.loaded })
-      }
+      onUploadProgress: onUploadProgressCallback
     })
   }
 
