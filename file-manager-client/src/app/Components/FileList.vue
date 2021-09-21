@@ -94,6 +94,7 @@
 <script>
 import FileService from 'src/service/FileListService'
 import ModalUpload from 'src/app/Components/ModalUpload'
+import { BASE_URL } from 'src/service/standard'
 
 export default {
   name: 'FileList',
@@ -157,9 +158,8 @@ export default {
         })
     },
     downloadFile ({ encodedName, name }) {
-      let base = 'http://localhost:3000'
       const link = document.createElement('a')
-      link.href = `${base}/file/download/${encodedName}`
+      link.href = `${BASE_URL}/file/download/${encodedName}`
       link.target = '_blank'
       link.download = name
       link.click()
