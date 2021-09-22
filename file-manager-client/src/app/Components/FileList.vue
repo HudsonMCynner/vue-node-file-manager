@@ -107,6 +107,23 @@
                 @click="downloadFile(file)"
               />
             </td>
+            <q-menu
+              touch-position
+              context-menu
+            >
+              <q-list
+                dense
+                style="min-width: 100px"
+              >
+                <q-item
+                  clickable
+                  @click="gerarLink(file)"
+                  v-close-popup
+                >
+                  <q-item-section>Gerar Link</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </tr>
         </tbody>
       </table>
@@ -133,6 +150,23 @@
           icon="file_download"
           @click="downloadFile(file)"
         />
+        <q-menu
+          touch-position
+          context-menu
+        >
+          <q-list
+            dense
+            style="min-width: 100px"
+          >
+            <q-item
+              clickable
+              @click="gerarLink(file)"
+              v-close-popup
+            >
+              <q-item-section>Gerar Link</q-item-section>
+            </q-item>
+          </q-list>
+        </q-menu>
       </div>
     </div>
   </div>
@@ -200,8 +234,8 @@ export default {
     selected: [],
     files: [],
     modalUpload: false,
-    modeView: 'grid', // list || grid
-    sort: 0 // 0 - A-Z || 1 Z-A
+    modeView: 'list', // list || grid
+    sort: 1 // 1 - A-Z || 0 Z-A
   }),
   methods: {
     toggleSort () {
@@ -253,6 +287,12 @@ export default {
       link.target = '_blank'
       link.download = name
       link.click()
+      console.log('~> ', link.href)
+    },
+    gerarLink ({ encodedName }) {
+      navigator.clipboard.writeText(`${BASE_URL}/file/download/${encodedName}`)
+      console.log('~> ', `${BASE_URL}/file/download/${encodedName}`)
+      this.$notify.info('Link gerado e copiado')
     },
     uploadEnd () {
       this.updateList()
@@ -307,7 +347,7 @@ export default {
   watch: {
     value: {
       handler (value) {
-        this.files = value
+        this.files = value.map((item) => item).sort((a, b) => a.name.localeCompare(b.name))
       },
       deep: true
     },
