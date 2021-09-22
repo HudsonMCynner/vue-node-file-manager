@@ -6,6 +6,4 @@ export { default as AppFileUploader } from './AppFileUploader'
 
 export { default as Navigator } from './Navigator'
 
-export { default as TreeFolders } from './TreeFolders'
-
 export { default as VueTreeJS } from './VueTreeJS'

@@ -215,7 +215,7 @@ export default {
         this.selected = []
         return
       }
-      this.selected = this.files
+      this.selected = this.files.map((item) => item)
     }
   },
   watch: {
