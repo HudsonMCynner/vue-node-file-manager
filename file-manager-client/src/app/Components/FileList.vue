@@ -35,6 +35,7 @@
       <table class="style-table">
         <thead class="style-thead">
           <tr>
+            <th style="width: 25px" />
             <th class="style-th cell-checkbox">
               <q-checkbox
                 :value="isSelectedAll"
@@ -57,6 +58,12 @@
             @click="selectFile(file)"
             :class="{'selected-row': isSelected(file._id)}"
           >
+            <td class="style-td">
+              <q-icon
+                :name="getIcon(file.name)"
+                size="20px"
+              />
+            </td>
             <td class="style-td cell-checkbox">
               <q-checkbox
                 :value="isSelected(file._id)"
@@ -111,8 +118,36 @@ export default {
   },
   created () {
     this.files = this.value
+    if (!Array.prototype.last) {
+      // eslint-disable-next-line no-extend-native
+      Array.prototype.last = function () {
+        return this[this.length - 1]
+      }
+    }
   },
   data: () => ({
+    fileIcons: {
+      pdf: 'fa fa-file-pdf-o',
+      txt: 'fa fa-file-text-o',
+      doc: 'fa fa-file-word-o',
+      docx: 'fa fa-file-word-o',
+      zip: 'fa fa-file-archive-o',
+      xls: 'fa fa-file-excel-o',
+      xlsx: 'fa fa-file-excel-o',
+      png: 'fa fa-file-image-o',
+      jpg: 'fa fa-file-image-o',
+      jpeg: 'fa fa-file-image-o',
+      webp: 'fa fa-file-image-o',
+      ogg: 'fa fa-file-audio-o',
+      mp2: 'fa fa-file-audio-o',
+      wma: 'fa fa-file-audio-o',
+      mp4: 'fa fa-file-film-o',
+      avi: 'fa fa-file-film-o',
+      kmv: 'fa fa-file-film-o',
+      html: 'fa fa-file-code-o',
+      exe: 'fa fa-terminal',
+      others: 'fa fa-file-o'
+    },
     inputUpload: {
       inputField: true,
       dropZone: true,
@@ -127,6 +162,10 @@ export default {
     modalUpload: false
   }),
   methods: {
+    getIcon (name) {
+      debugger
+      return this.fileIcons[name.split('.').last()]
+    },
     kbToMb (bytes) {
       if (typeof bytes !== 'number') {
         return ''
