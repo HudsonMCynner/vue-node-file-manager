@@ -180,26 +180,26 @@ export default {
   data: () => ({
     showCheckbox: false,
     fileIcons: {
-      pdf: 'fa fa-file-pdf-o',
-      txt: 'fa fa-file-text-o',
-      doc: 'fa fa-file-word-o',
-      docx: 'fa fa-file-word-o',
-      zip: 'fa fa-file-archive-o',
-      xls: 'fa fa-file-excel-o',
-      xlsx: 'fa fa-file-excel-o',
-      png: 'fa fa-file-image-o',
-      jpg: 'fa fa-file-image-o',
-      jpeg: 'fa fa-file-image-o',
-      webp: 'fa fa-file-image-o',
-      ogg: 'fa fa-file-audio-o',
-      mp2: 'fa fa-file-audio-o',
-      wma: 'fa fa-file-audio-o',
-      mp4: 'fa fa-file-film-o',
-      avi: 'fa fa-file-film-o',
-      kmv: 'fa fa-file-film-o',
-      html: 'fa fa-file-code-o',
+      pdf: 'fa fa-file-pdf',
+      txt: 'fa fa-file-text',
+      doc: 'fa fa-file-word',
+      docx: 'fa fa-file-word',
+      zip: 'fa fa-file-archive',
+      xls: 'fa fa-file-excel',
+      xlsx: 'fa fa-file-excel',
+      png: 'fa fa-file-image',
+      jpg: 'fa fa-file-image',
+      jpeg: 'fa fa-file-image',
+      webp: 'fa fa-file-image',
+      ogg: 'fa fa-file-audio',
+      mp2: 'fa fa-file-audio',
+      wma: 'fa fa-file-audio',
+      mp4: 'fa fa-file-film',
+      avi: 'fa fa-file-film',
+      kmv: 'fa fa-file-film',
+      html: 'fa fa-file-code',
       exe: 'fa fa-terminal',
-      others: 'fa fa-file-o'
+      others: 'fa fa-file'
     },
     inputUpload: {
       inputField: true,
@@ -227,7 +227,8 @@ export default {
       this.files = this.files.sort((a, b) => a.name.localeCompare(b.name)).reverse()
     },
     getIcon (name) {
-      return this.fileIcons[name.split('.').last()]
+      let icon = this.fileIcons[name.split('.').last()]
+      return icon || this.fileIcons['others']
     },
     kbToMb (bytes) {
       if (typeof bytes !== 'number') {
