@@ -16,13 +16,13 @@
               outline
               label="Pasta"
               color="primary"
-              @click="selectFolder"
+              @click="selectFiles(false, true)"
             />
             <q-btn
               outline
               label="Arquivo"
               color="primary"
-              @click="selectFiles"
+              @click="selectFiles(true, false)"
             />
             <div class="upload-info">
               {{ enviados }} de {{ files.length }} Arquivos Enviados
@@ -177,9 +177,9 @@ export default {
       this.files = []
       this.enviados = 0
     },
-    selectFiles () {
+    selectFiles (multiple, diretorio) {
       // this.resetData()
-      this.getFile(true, false).then((files) => {
+      this.getFile(multiple, diretorio).then((files) => {
         this.files = this.files.concat(Array.from(files).map((file) => {
           return {
             file,
@@ -189,27 +189,6 @@ export default {
           }
         }))
       })
-    },
-    selectFolder () {
-      this.getFile(false, true).then((files) => {
-        this.files = Array.from(files).map((file) => {
-          return {
-            file,
-            progress: 0,
-            loaded: '-',
-            error: false
-          }
-        })
-      })
-      // this.getFile(false, true).then((files) => {
-      //   if (!files.length) {
-      //     return this.$notify.info('Nenhum arquivo selecionado')
-      //   }
-      //   let folder = files[0].webkitRelativePath.split('/')[0]
-      //   console.log('~> ', folder)
-      //   FileService.build().uploadFiles(files, this.folderPath, this)
-      //     .then(this.updateList)
-      // })
     }
   },
   watch: {
