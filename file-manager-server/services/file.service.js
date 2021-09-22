@@ -137,9 +137,9 @@ module.exports = {
                 filename: (req, file, cb) => {
                     // let extension = fileConfig.supportedMimes[file.mimetype]
                     let paths = file.originalname.split('.')
-                    let extension = file.originalname.split('.')[paths.length - 1]
+                    let extension = file.originalname.indexOf('.') > -1 ? file.originalname.split('.')[paths.length - 1] : null
                     let originalname = file.originalname.split('.')[0]
-                    let fileName = originalname + '-' + (new Date()).getMilliseconds() + '.' + extension
+                    let fileName = `${originalname}-${(new Date()).getMilliseconds()}${extension ? `.${extension}` : ''}`
                     cb(null, fileName)
                 }
             })

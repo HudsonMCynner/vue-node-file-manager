@@ -171,16 +171,16 @@ export default {
       this.enviados = 0
     },
     selectFiles () {
-      this.resetData()
+      // this.resetData()
       this.getFile(true, false).then((files) => {
-        this.files = Array.from(files).map((file) => {
+        this.files = this.files.concat(Array.from(files).map((file) => {
           return {
             file,
             progress: 0,
             loaded: '-',
             error: false
           }
-        })
+        }))
       })
     },
     selectFolder () {

@@ -56,16 +56,6 @@
       <table class="style-table">
         <thead class="style-thead">
           <tr>
-            <th
-              class="style-th cell-checkbox"
-              v-if="showCheckbox"
-            >
-              <q-checkbox
-
-                :value="isSelectedAll"
-                @input="selectAllFiles"
-              />
-            </th>
             <th class="style-th">
               Nome
             </th>
@@ -79,18 +69,9 @@
           <tr
             v-for="(file, index) in getFiles"
             :key="index"
-            @click="selectFile(file)"
+            @click="selectFile($event, file)"
             :class="{'selected-row': isSelected(file._id)}"
           >
-            <td
-              class="style-td cell-checkbox"
-              v-if="showCheckbox"
-            >
-              <q-checkbox
-                :value="isSelected(file._id)"
-                @input="selectFile(file)"
-              />
-            </td>
             <td class="style-td">
               <div
                 style="width: 100%;
@@ -138,7 +119,7 @@
         class="file-card"
         v-for="(file, index) in getFiles"
         :key="index"
-        @click="selectFile(file)"
+        @click="selectFile($event, file)"
         :class="{'selected-row': isSelected(file._id)}"
       >
         <q-icon
@@ -178,7 +159,6 @@ export default {
     }
   },
   data: () => ({
-    showCheckbox: false,
     fileIcons: {
       pdf: 'fa fa-file-pdf',
       txt: 'fa fa-file-text',
@@ -199,6 +179,7 @@ export default {
       kmv: 'fa fa-file-film',
       html: 'fa fa-file-code',
       exe: 'fa fa-terminal',
+      csv: 'fa fa-file-csv',
       others: 'fa fa-file'
     },
     inputUpload: {
@@ -211,7 +192,6 @@ export default {
     model: null,
     selected: [],
     files: [],
-    selectMode: 'single', // single | multiple
     modalUpload: false,
     modeView: 'grid', // list || grid
     sort: 0 // 0 - A-Z || 1 Z-A
@@ -288,23 +268,26 @@ export default {
       }
       removeRecursive(this.selected, 0)
     },
-    selectFile (file) {
-      const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
-      if (this.selectMode === 'multiple') {
+    selectFile (event, file) {
+      if (event.ctrlKey) {
+        const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
         if (index !== -1) {
           this.selected.splice(index, 1)
         }
         else {
           this.selected.push(file)
         }
+        return
+      }
+      if (event.shiftKey) {
+        return
+      }
+      const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
+      if (index !== -1 && this.selected.length === 1) {
+        this.selected.splice(index, 1)
       }
       else {
-        if (index !== -1) {
-          this.selected.splice(index, 1)
-        }
-        else {
-          this.selected = [file]
-        }
+        this.selected = [file]
       }
     },
     isSelected (id) {
@@ -312,13 +295,6 @@ export default {
         return false
       }
       return this.selected.some((file) => file._id === id)
-    },
-    selectAllFiles () {
-      if (this.isSelectedAll) {
-        this.selected = []
-        return
-      }
-      this.selected = this.files.map((item) => item)
     }
   },
   watch: {
@@ -435,14 +411,14 @@ export default {
 .style-td {
   padding-left: 5px;
   border-top: 1px solid;
-  border-bottom: 1px solid;
+  //border-bottom: 1px solid;
   border-color: rgba(0,0,0,0.12);
   font-size: 12px;
-  cursor pointer
+  //cursor pointer
 }
 .cell-checkbox
   width 30px
 .selected-row
   background #2d99a847
-  font-weight 700
+  //font-weight 700
 </style>
