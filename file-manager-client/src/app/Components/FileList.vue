@@ -126,6 +126,13 @@
           :name="getIcon(file.name)"
         />
         <span class="file-label">{{ file.name }}</span>
+        <q-btn
+          class="download-btn"
+          flat
+          dense
+          icon="file_download"
+          @click="downloadFile(file)"
+        />
       </div>
     </div>
   </div>
@@ -359,6 +366,11 @@ export default {
       -webkit-box-orient: vertical;
       overflow: hidden;
       width: 100%;
+    .download-btn
+      position absolute
+      right 0
+      bottom 0
+      font-size 10px
 
 // ================ List ==============
 .tableFixHead

@@ -58,6 +58,10 @@
               <span class="file-name">{{ file.file.name }}</span>
               <!--                            <span class="file-size-progress">{{ file.loaded }}</span>-->
               <span class="file-size">{{ kbToMb(file.loaded) }} / {{ kbToMb(file.file.size) }}</span>
+              <q-icon
+                name="fas fa-times"
+                @click="removeFileFromUploadList(index)"
+              />
             </div>
             <div class="progress-content">
               <div class="progress">
@@ -132,6 +136,9 @@ export default {
     enviados: 0
   }),
   methods: {
+    removeFileFromUploadList (index) {
+      this.files.splice(index, 1)
+    },
     sendFiles () {
       if (!this.files.length) {
         return
@@ -256,8 +263,14 @@ export default {
       padding: 5px 2px;
       .file-info
         display grid
-        grid-template-columns 1fr 150px
+        grid-template-columns 1fr 150px 25px
         align-items center
+        grid-column-gap: 5px;
+        .q-icon
+          font-size 18px
+          cursor pointer
+          &:hover
+            color red
         .file-name
           display: -webkit-box;
           -webkit-line-clamp: 1;
