@@ -42,6 +42,7 @@ module.exports = function (ctx) {
     supportIE: true,
     build: {
       scopeHoisting: true,
+      // publicPath: 'file-manager-client',
       // vueRouterMode: 'history',
 
       // showProgress: false,
