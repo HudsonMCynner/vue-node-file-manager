@@ -1,6 +1,24 @@
 <template>
   <div class="file-lista-container">
     <div class="file-list-header">
+      <q-btn
+        :outline="modeView !== 'list'"
+        icon="view_list"
+        color="primary"
+        @click="modeView = 'list'"
+      />
+      <q-btn
+        :outline="modeView !== 'grid'"
+        icon="grid_view"
+        color="primary"
+        @click="modeView = 'grid'"
+      />
+      <q-btn
+        outline
+        icon="sort"
+        color="primary"
+        @click="toggleSort"
+      />
       <q-input
         v-model="search"
         outlined
@@ -31,13 +49,19 @@
         @close="modalUpload = false"
       />
     </div>
-    <div class="file-list-content tableFixHead">
+    <div
+      class="file-list-content tableFixHead"
+      v-if="modeView === 'list'"
+    >
       <table class="style-table">
         <thead class="style-thead">
           <tr>
-            <th style="width: 25px" />
-            <th class="style-th cell-checkbox">
+            <th
+              class="style-th cell-checkbox"
+              v-if="showCheckbox"
+            >
               <q-checkbox
+
                 :value="isSelectedAll"
                 @input="selectAllFiles"
               />
@@ -53,25 +77,36 @@
         </thead>
         <tbody>
           <tr
-            v-for="(file, index) in files"
+            v-for="(file, index) in getFiles"
             :key="index"
             @click="selectFile(file)"
             :class="{'selected-row': isSelected(file._id)}"
           >
-            <td class="style-td">
-              <q-icon
-                :name="getIcon(file.name)"
-                size="20px"
-              />
-            </td>
-            <td class="style-td cell-checkbox">
+            <td
+              class="style-td cell-checkbox"
+              v-if="showCheckbox"
+            >
               <q-checkbox
                 :value="isSelected(file._id)"
                 @input="selectFile(file)"
               />
             </td>
             <td class="style-td">
-              {{ file.name }}
+              <div
+                style="width: 100%;
+    height: 35px;
+    display: grid;
+    align-items: center;
+    grid-template-columns: 26px 1fr;
+    grid-column-gap: 5px;
+    padding: 0 2px;"
+              >
+                <q-icon
+                  :name="getIcon(file.name)"
+                  size="20px"
+                />
+                {{ file.name }}
+              </div>
             </td>
             <td
               class="style-td"
@@ -94,6 +129,23 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div
+      class="file-list-grid-view"
+      v-if="modeView === 'grid'"
+    >
+      <div
+        class="file-card"
+        v-for="(file, index) in getFiles"
+        :key="index"
+        @click="selectFile(file)"
+        :class="{'selected-row': isSelected(file._id)}"
+      >
+        <q-icon
+          :name="getIcon(file.name)"
+        />
+        <span class="file-label">{{ file.name }}</span>
+      </div>
     </div>
   </div>
 </template>
@@ -126,6 +178,7 @@ export default {
     }
   },
   data: () => ({
+    showCheckbox: false,
     fileIcons: {
       pdf: 'fa fa-file-pdf-o',
       txt: 'fa fa-file-text-o',
@@ -158,12 +211,22 @@ export default {
     model: null,
     selected: [],
     files: [],
-    selectMode: 'multiple', // single | multiple
-    modalUpload: false
+    selectMode: 'single', // single | multiple
+    modalUpload: false,
+    modeView: 'grid', // list || grid
+    sort: 0 // 0 - A-Z || 1 Z-A
   }),
   methods: {
+    toggleSort () {
+      if (this.sort === 0) {
+        this.sort = 1
+        this.files = this.files.sort((a, b) => a.name.localeCompare(b.name))
+        return
+      }
+      this.sort = 0
+      this.files = this.files.sort((a, b) => a.name.localeCompare(b.name)).reverse()
+    },
     getIcon (name) {
-      debugger
       return this.fileIcons[name.split('.').last()]
     },
     kbToMb (bytes) {
@@ -269,6 +332,9 @@ export default {
     }
   },
   computed: {
+    getFiles () {
+      return this.files
+    },
     isSelectedAll () {
       return this.selected.length === this.files.length && this.selected.length > 0 && this.files.length > 0
     }
@@ -280,6 +346,44 @@ export default {
   lang="stylus"
   scoped
 >
+// ================ Grid ==============
+.file-list-grid-view
+  display grid
+  grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+  grid-template-rows: repeat(auto-fill, minmax(100px, 1fr));
+  row-gap 15px
+  column-gap 10px
+  justify-content: space-between;
+  overflow: auto;
+  height: calc(100vh - 120px);
+  .file-card
+    //box-shadow: 0 0 7px 2px #0000006b
+    padding 10px
+    border 1px solid #938f8f
+    height 90px
+    display flex
+    flex-direction column
+    border-radius 5px
+    position relative
+    .q-icon
+      font-size 45px
+      position absolute
+      top 50%
+      left 50%
+      transform translate(-50%, -50%)
+    .file-label
+      position: absolute;
+      bottom: -30px;
+      left: 0;
+      padding: 2px 0;
+      height: 25px;
+      display: -webkit-box;
+      -webkit-line-clamp: 1;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      width: 100%;
+
+// ================ List ==============
 .tableFixHead
   border 1px solid #b1b1b1
   border-radius 3px
@@ -304,7 +408,7 @@ export default {
 }
 .file-lista-container .file-list-header {
   display: grid;
-  grid-template-columns: 1fr 50px 50px;
+  grid-template-columns: 50px 50px 50px 1fr 50px 50px;
   grid-column-gap: 10px;
   padding: 5px;
 }
