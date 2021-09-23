@@ -2,16 +2,10 @@
   <div class="file-lista-container">
     <div class="file-list-header">
       <q-btn
-        :outline="modeView !== 'list'"
-        icon="fas fa-list"
+        outline
+        :icon="modeView === 'grid' ? 'fas fa-th-large' : 'fas fa-list'"
         color="primary"
-        @click="modeView = 'list'"
-      />
-      <q-btn
-        :outline="modeView !== 'grid'"
-        icon="fas fa-th-large"
-        color="primary"
-        @click="modeView = 'grid'"
+        @click="modeView = modeView === 'list' ? 'grid' : 'list'"
       />
       <q-btn
         outline
@@ -217,9 +211,9 @@ export default {
       ogg: 'fa fa-file-audio',
       mp2: 'fa fa-file-audio',
       wma: 'fa fa-file-audio',
-      mp4: 'fa fa-file-film',
-      avi: 'fa fa-file-film',
-      kmv: 'fa fa-file-film',
+      mp4: 'fa fa-file-video',
+      avi: 'fa fa-file-video',
+      kmv: 'fa fa-file-video',
       html: 'fa fa-file-code',
       exe: 'fa fa-terminal',
       csv: 'fa fa-file-csv',
@@ -244,6 +238,9 @@ export default {
     }
   }),
   methods: {
+    toggleModeView () {
+      this.modeView = this.modeView === 'list' ? 'grid' : 'list'
+    },
     toggleSort () {
       if (this.sort === 0) {
         this.sort = 1
@@ -332,24 +329,24 @@ export default {
         }
         return
       }
-      if (event.shiftKey) {
-        let inicio = 0
-        if (this.selected.length) {
-          inicio = this.files.findIndex((item) => item._id === this.selected[this.selected.length - 1]._id) // pega sempre o ultimo selecionado
-        }
-        let fim = this.files.findIndex((item) => item._id === file._id)
-        if (inicio > fim) {
-          for (let i = inicio; i <= fim; i--) {
-            this.selected.push(this.files[i])
-          }
-        }
-        else {
-          for (let i = inicio; i <= fim; i++) {
-            this.selected.push(this.files[i])
-          }
-        }
-        return
-      }
+      // if (event.shiftKey) {
+      //   let inicio = 0
+      //   if (this.selected.length) {
+      //     inicio = this.files.findIndex((item) => item._id === this.selected[this.selected.length - 1]._id) // pega sempre o ultimo selecionado
+      //   }
+      //   let fim = this.files.findIndex((item) => item._id === file._id)
+      //   if (inicio > fim) {
+      //     for (let i = inicio; i <= fim; i--) {
+      //       this.selected.push(this.files[i])
+      //     }
+      //   }
+      //   else {
+      //     for (let i = inicio; i <= fim; i++) {
+      //       this.selected.push(this.files[i])
+      //     }
+      //   }
+      //   return
+      // }
       const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
       if (index !== -1 && this.selected.length === 1) {
         this.selected.splice(index, 1)
@@ -461,7 +458,7 @@ export default {
 }
 .file-lista-container .file-list-header {
   display: grid;
-  grid-template-columns: 50px 50px 50px 1fr 50px 50px;
+  grid-template-columns: 50px 50px 1fr 50px 50px;
   grid-column-gap: 10px;
   padding: 5px;
 }

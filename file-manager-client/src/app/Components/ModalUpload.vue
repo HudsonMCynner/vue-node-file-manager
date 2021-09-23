@@ -36,7 +36,7 @@
             <q-linear-progress
               stripe
               style="z-index: 9999;"
-              size="15px"
+              size="25px"
               :value="getProgress"
               color="primary"
             >
