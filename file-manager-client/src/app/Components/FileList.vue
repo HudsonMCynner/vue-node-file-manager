@@ -3,19 +3,19 @@
     <div class="file-list-header">
       <q-btn
         :outline="modeView !== 'list'"
-        icon="view_list"
+        icon="fas fa-list"
         color="primary"
         @click="modeView = 'list'"
       />
       <q-btn
         :outline="modeView !== 'grid'"
-        icon="grid_view"
+        icon="fas fa-th-large"
         color="primary"
         @click="modeView = 'grid'"
       />
       <q-btn
         outline
-        icon="sort"
+        :icon="sort ? 'fas fa-sort-alpha-up' : 'fas fa-sort-alpha-down'"
         color="primary"
         @click="toggleSort"
       />
@@ -26,18 +26,18 @@
         placeholder="Pesquisar"
       >
         <template v-slot:append>
-          <q-icon name="search" />
+          <q-icon name="fas fa-search" />
         </template>
       </q-input>
       <q-btn
         outline
-        icon="file_upload"
+        icon="fas fa-upload"
         color="primary"
         @click="modalUpload = true"
       />
       <q-btn
         outline
-        icon="delete"
+        icon="fas fa-trash-alt"
         color="primary"
         @click="removeFile"
       />
@@ -104,7 +104,7 @@
                 flat
                 dense
                 size="md"
-                icon="file_download"
+                icon="fas fa-download"
                 @click="downloadFile(file)"
               />
             </td>
@@ -148,7 +148,7 @@
           class="download-btn"
           flat
           dense
-          icon="file_download"
+          icon="fas fa-download"
           @click="downloadFile(file)"
         />
         <q-menu
@@ -207,6 +207,7 @@ export default {
       doc: 'fa fa-file-word',
       docx: 'fa fa-file-word',
       zip: 'fa fa-file-archive',
+      rar: 'fa fa-file-archive',
       xls: 'fa fa-file-excel',
       xlsx: 'fa fa-file-excel',
       png: 'fa fa-file-image',
@@ -381,6 +382,9 @@ export default {
   justify-content: space-between;
   overflow: auto;
   height: calc(100vh - 120px);
+  padding: 5px;
+  border: 1px solid #938f8f;
+  border-radius: 5px;
   .file-card
     //box-shadow: 0 0 7px 2px #0000006b
     padding 10px

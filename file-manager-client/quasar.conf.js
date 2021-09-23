@@ -30,7 +30,7 @@ module.exports = function (ctx) {
       'app.styl'
     ],
     extras: [
-      'material-icons'
+      // 'fontawesome'
       // ctx.theme.mat ? 'roboto-font' : null
       /*
        * 'material-icons' // optional, you are not bound to it
@@ -86,7 +86,7 @@ module.exports = function (ctx) {
     // framework: 'all' --- includes everything; for dev only!
     framework: {
       components: componentsQuasarConf.components(),
-      iconSet: 'material-icons',
+      iconSet: 'fontawesome-v5',
       directives: [
         'Ripple',
         'ClosePopup'

@@ -7,14 +7,14 @@
   "author": "Hudson Machado",
   "private": true,
   "scripts": {
-    "build": "build.sh",
+    "build": "quasar build",
     "upgrade": "ncu -u -i",
     "lint": "eslint --ext .js,.vue src",
     "lint-fix": "eslint --ext .js,.vue src --fix",
-    "test": "echo \"No test specified\" && exit 0",
-    "transporte": "lerna bootstrap \n cd ../transporte \n quasar dev"
+    "test": "echo \"No test specified\" && exit 0"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.4",
     "@quasar/app": "^1.2.4",
     "@quasar/extras": "^1.3.3",
     "axios": "^0.18.1",
