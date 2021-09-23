@@ -70,6 +70,7 @@
             v-for="(file, index) in getFiles"
             :key="index"
             @click="selectFile($event, file)"
+            @click.right="selectFile($event, file)"
             :class="{'selected-row': isSelected(file._id)}"
           >
             <td class="style-td">
