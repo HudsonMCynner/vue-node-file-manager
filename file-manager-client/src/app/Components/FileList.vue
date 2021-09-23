@@ -237,7 +237,11 @@ export default {
     files: [],
     modalUpload: false,
     modeView: 'list', // list || grid
-    sort: 1 // 1 - A-Z || 0 Z-A
+    sort: 1, // 1 - A-Z || 0 Z-A,
+    range: {
+      inicio: null,
+      fim: null
+    }
   }),
   methods: {
     toggleSort () {
@@ -329,6 +333,21 @@ export default {
         return
       }
       if (event.shiftKey) {
+        let inicio = 0
+        if (this.selected.length) {
+          inicio = this.files.findIndex((item) => item._id === this.selected[this.selected.length - 1]._id) // pega sempre o ultimo selecionado
+        }
+        let fim = this.files.findIndex((item) => item._id === file._id)
+        if (inicio > fim) {
+          for (let i = inicio; i <= fim; i--) {
+            this.selected.push(this.files[i])
+          }
+        }
+        else {
+          for (let i = inicio; i <= fim; i++) {
+            this.selected.push(this.files[i])
+          }
+        }
         return
       }
       const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)

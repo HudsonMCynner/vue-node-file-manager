@@ -37,14 +37,14 @@
               stripe
               style="z-index: 9999;"
               size="15px"
-              :value="progress"
+              :value="getProgress"
               color="primary"
             >
               <div class="absolute-full flex flex-center">
                 <q-badge
                   color="white"
                   text-color="accent"
-                  :label="getProgressInfo"
+                  :label="`${(getProgress * 100).toFixed(2)}%`"
                 />
               </div>
             </q-linear-progress>
@@ -66,6 +66,7 @@
               <span class="file-size">{{ kbToMb(file.loaded) }} / {{ kbToMb(file.file.size) }}</span>
               <q-icon
                 name="fas fa-times"
+                v-if="file.progress < 100"
                 @click="removeFileFromUploadList(index)"
               />
             </div>
@@ -83,7 +84,7 @@
               >{{ file.progress }}%</span>
               <q-icon
                 v-else
-                name="check_circle"
+                name="fas fa-check-circle"
               />
             </div>
           </div>
@@ -151,7 +152,10 @@ export default {
       }
       const sendFileRecursive = (list, index) => {
         if (index >= list.length) {
-          this.uploadEnd()
+          this.enviados = index
+          setTimeout(() => {
+            this.uploadEnd()
+          }, 2000)
           return
         }
         this.enviados = index
@@ -214,8 +218,8 @@ export default {
     }
   },
   computed: {
-    getProgressInfo () {
-      return `%`
+    getProgress () {
+      return this.files.length ? this.enviados / this.files.length : 0
     }
   }
 }
