@@ -24,26 +24,32 @@
               color="primary"
               @click="selectFiles(true, false)"
             />
-            <div class="upload-info">
-              {{ enviados }} de {{ files.length }} Arquivos Enviados
-            </div>
+            <q-btn
+              v-if="false"
+              outline
+              label="Link"
+              color="primary"
+              @click="linkUpload"
+            />
           </div>
-          <q-linear-progress
-            v-if="false"
-            stripe
-            style="z-index: 9999;"
-            size="15px"
-            :value="progress"
-            color="primary"
-          >
-            <div class="absolute-full flex flex-center">
-              <q-badge
-                color="white"
-                text-color="accent"
-                :label="getProgressInfo"
-              />
-            </div>
-          </q-linear-progress>
+          <div class="upload-info">
+            <q-linear-progress
+              stripe
+              style="z-index: 9999;"
+              size="15px"
+              :value="progress"
+              color="primary"
+            >
+              <div class="absolute-full flex flex-center">
+                <q-badge
+                  color="white"
+                  text-color="accent"
+                  :label="getProgressInfo"
+                />
+              </div>
+            </q-linear-progress>
+            {{ enviados }} de {{ files.length }} Arquivos Enviados
+          </div>
         </div>
       </q-card-section>
 
@@ -130,7 +136,7 @@ export default {
     this.$root.$off('app:progress')
   },
   data: () => ({
-    progress: 0.4,
+    progress: 1,
     model: false,
     files: [],
     enviados: 0
@@ -177,6 +183,13 @@ export default {
       this.files = []
       this.enviados = 0
     },
+    linkUpload () {
+      fetch('https://upload.wikimedia.org/wikipedia/commons/7/77/Delete_key1.jpg')
+        .then((res) => res.blob())
+        .then((blob) => {
+          console.log('~> ', blob)
+        })
+    },
     selectFiles (multiple, diretorio) {
       // this.resetData()
       this.getFile(multiple, diretorio).then((files) => {
@@ -214,7 +227,7 @@ export default {
 >
 .q-card
   width: 600px;
-  height: 600px;
+  height: 610px;
   .modal-upload-header
     display grid
     grid-template-columns 1fr
@@ -228,13 +241,15 @@ export default {
     .header-actions
       display grid
       grid-gap 5px
-      grid-template-columns repeat(2, 90px) 1fr
+      grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
       grid-column 1
       grid-row 2
     .upload-info
-      display flex
-      justify-content flex-end
-      align-items flex-end
+      display grid
+      grid-template-columns 1fr 190px
+      grid-column-gap 10px
+      justify-content space-between
+      align-items center
   .files-container
     height: 405px
     overflow auto;
