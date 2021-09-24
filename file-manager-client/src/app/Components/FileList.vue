@@ -103,23 +103,23 @@
                 @click="downloadFile(file)"
               />
             </td>
-            <q-menu
-              touch-position
-              context-menu
-            >
-              <q-list
-                dense
-                style="min-width: 100px"
-              >
-                <q-item
-                  clickable
-                  @click="gerarLink(file)"
-                  v-close-popup
-                >
-                  <q-item-section>Gerar Link</q-item-section>
-                </q-item>
-              </q-list>
-            </q-menu>
+            <!--            <q-menu-->
+            <!--              touch-position-->
+            <!--              context-menu-->
+            <!--            >-->
+            <!--              <q-list-->
+            <!--                dense-->
+            <!--                style="min-width: 100px"-->
+            <!--              >-->
+            <!--                <q-item-->
+            <!--                  clickable-->
+            <!--                  @click="gerarLink(file)"-->
+            <!--                  v-close-popup-->
+            <!--                >-->
+            <!--                  <q-item-section>Gerar Link</q-item-section>-->
+            <!--                </q-item>-->
+            <!--              </q-list>-->
+            <!--            </q-menu>-->
           </tr>
         </tbody>
       </table>
@@ -508,14 +508,16 @@ export default {
   font-size: 15px;
   text-align: initial;
 }
-.style-td {
+.style-td
   padding-left: 5px;
   border-top: 1px solid;
   //border-bottom: 1px solid;
   border-color: rgba(0,0,0,0.12);
   font-size: 12px;
+  .q-icon
+    color: #7a7d7d
   //cursor pointer
-}
+
 .cell-checkbox
   width 30px
 .selected-row

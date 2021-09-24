@@ -61,7 +61,13 @@ module.exports = {
     getFilesByDir: (req, res, next) => {
         File.find((err, files) => {
             let path = req.query.path || fileConfig.uploadsFolder
-            files = files.filter((file) => file.path.indexOf(path) > -1)
+            files = files.filter((file) => {
+                if (file.folder) {
+                    let paths = path.split('/')
+                    return file.name !== paths[paths.length - 1] && file.path.indexOf(path) > -1
+                }
+                return file.path.indexOf(path) > -1
+            })
             if (err) {
                 return res.status(404).end();
             }
