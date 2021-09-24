@@ -1,7 +1,7 @@
 <template>
   <div class="tree-container">
     <v-jstree
-      v-if="model.length"
+      v-if="show"
       :data="model"
       allow-batch
       whole-row
@@ -37,9 +37,15 @@ export default {
     prompt: false,
     folderName: null,
     model: [],
-    selectedNode: null
+    selectedNode: null,
+    show: false
   }),
   methods: {
+    showComponent () {
+      setTimeout(() => {
+        this.show = true
+      }, 200)
+    },
     newFolder () {
       if (this.folderName) {
         this.prompt = false
@@ -56,8 +62,14 @@ export default {
     value: {
       handler (value) {
         this.model = value
+        this.show = false
+        if (value.length) {
+          this.showComponent()
+        }
       }
     }
+  },
+  computed: {
   }
 }
 </script>

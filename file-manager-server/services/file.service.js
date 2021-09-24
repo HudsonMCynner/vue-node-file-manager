@@ -102,6 +102,22 @@ module.exports = {
                 fileModel.path = req.body.folderPath || fileConfig.uploadsFolder
                 if (req.body.fileFolderPath) {
                     fileModel.path = `${fileModel.path}/${req.body.fileFolderPath}`
+                    let folderPath = `${req.body.folderPath || fileConfig.uploadsFolder}/${req.body.fileFolderPath}`
+                    File.findOne({ path: folderPath }, (error, folder) => {
+                        if (!folder) {
+                            let paths = req.body.fileFolderPath.split('/')
+                            let folderModel = new File({
+                                name: paths[paths.length - 1],
+                                path: folderPath,
+                                folder: true
+                            })
+                            folderModel.save((err) => {
+                                if (err) {
+                                    return next('Error creating new folder', err);
+                                }
+                            })
+                        }
+                    })
                 }
                 fileModel.size = file.size
                 fileModel.mimetype = file.mimetype

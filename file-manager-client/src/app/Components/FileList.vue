@@ -78,7 +78,7 @@
     padding: 0 2px;"
               >
                 <q-icon
-                  :name="getIcon(file.name)"
+                  :name="getIcon(file)"
                   size="20px"
                 />
                 {{ file.name }}
@@ -95,6 +95,7 @@
               style="width: 45px"
             >
               <q-btn
+                v-if="!file.folder"
                 flat
                 dense
                 size="md"
@@ -135,10 +136,11 @@
         :class="{'selected-row': isSelected(file._id)}"
       >
         <q-icon
-          :name="getIcon(file.name)"
+          :name="getIcon(file)"
         />
         <span class="file-label">{{ file.name }}</span>
         <q-btn
+          v-if="!file.folder"
           class="download-btn"
           flat
           dense
@@ -217,7 +219,8 @@ export default {
       html: 'fa fa-file-code',
       exe: 'fa fa-terminal',
       csv: 'fa fa-file-csv',
-      others: 'fa fa-file'
+      others: 'fa fa-file',
+      folder: 'fa fa-folder'
     },
     inputUpload: {
       inputField: true,
@@ -238,20 +241,36 @@ export default {
     }
   }),
   methods: {
-    toggleModeView () {
-      this.modeView = this.modeView === 'list' ? 'grid' : 'list'
-    },
     toggleSort () {
       if (this.sort === 0) {
         this.sort = 1
-        this.files = this.files.sort((a, b) => a.name.localeCompare(b.name))
+        this.files = this.files.sort((a, b) => {
+          if (a.folder && !b.folder) {
+            return -1
+          }
+          if (!a.folder && b.folder) {
+            return 1
+          }
+          return a.name.localeCompare(b.name)
+        })
         return
       }
       this.sort = 0
-      this.files = this.files.sort((a, b) => a.name.localeCompare(b.name)).reverse()
+      this.files = this.files.sort((a, b) => {
+        if (a.folder && !b.folder) {
+          return -1
+        }
+        if (!a.folder && b.folder) {
+          return 1
+        }
+        return a.name.localeCompare(b.name)
+      }).reverse()
     },
-    getIcon (name) {
-      let icon = this.fileIcons[name.split('.').last()]
+    getIcon (file) {
+      if (file.folder) {
+        return this.fileIcons['folder']
+      }
+      let icon = this.fileIcons[file.name.split('.').last()]
       return icon || this.fileIcons['others']
     },
     kbToMb (bytes) {
@@ -365,7 +384,15 @@ export default {
   watch: {
     value: {
       handler (value) {
-        this.files = value.map((item) => item).sort((a, b) => a.name.localeCompare(b.name))
+        this.files = value.map((item) => item).sort((a, b) => {
+          if (a.folder && !b.folder) {
+            return -1
+          }
+          if (!a.folder && b.folder) {
+            return 1
+          }
+          return a.name.localeCompare(b.name)
+        })
       },
       deep: true
     },
