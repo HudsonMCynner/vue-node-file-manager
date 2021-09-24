@@ -163,7 +163,8 @@ export default {
           list[index].progress = ((progress.loaded / progress.total) * 100).toFixed(2)
           list[index].loaded = progress.loaded // bytes loaded
         }
-        FileService.build().uploadFiles([list[index].file], this.folderPath, updateProgress)
+        debugger
+        FileService.build().uploadFiles([list[index].file], this.folderPath, list[index].folderPath, updateProgress)
           .then(() => {
             sendFileRecursive(list, (index + 1))
             this.$emit('update:storage')
@@ -198,12 +199,17 @@ export default {
       // this.resetData()
       this.getFile(multiple, diretorio).then((files) => {
         this.files = this.files.concat(Array.from(files).map((file) => {
-          return {
+          let fileObject = {
             file,
             progress: 0,
             loaded: '-',
             error: false
           }
+          if (diretorio) {
+            let paths = file.webkitRelativePath.split('/')
+            fileObject.folderPath = paths.slice(0, paths.length - 1).join('/')
+          }
+          return fileObject
         }))
       })
     }

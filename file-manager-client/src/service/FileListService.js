@@ -31,12 +31,17 @@ export default class FileListService extends Rest {
   /**
    * @param files
    * @param folderPath
+   * @param fileFolderPath
    * @param onUploadProgressCallback
    * @returns {Promise}
    */
-  uploadFiles (files, folderPath, onUploadProgressCallback) {
+  uploadFiles (files, folderPath, fileFolderPath, onUploadProgressCallback) {
+    debugger
     let formData = new FormData()
     formData.append('folderPath', folderPath)
+    if (fileFolderPath) {
+      formData.append('fileFolderPath', fileFolderPath)
+    }
     for (let index = 0; index < files.length; index++) {
       formData.append(files[index].name, files[index], files[index].name)
     }

@@ -86,6 +86,7 @@ export default {
         .then(this.updateDirectories)
     },
     getStorageUsage () {
+      this.updateDirectories()
       FileService.build().getTotalSizeOfFiles()
         .then((response) => {
           this.armazenamento = response.total

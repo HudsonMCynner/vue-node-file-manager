@@ -100,6 +100,9 @@ module.exports = {
 
                 fileModel.encodedName = btoa(fileModel._id)
                 fileModel.path = req.body.folderPath || fileConfig.uploadsFolder
+                if (req.body.fileFolderPath) {
+                    fileModel.path = `${fileModel.path}/${req.body.fileFolderPath}`
+                }
                 fileModel.size = file.size
                 fileModel.mimetype = file.mimetype
                 fileModel.save((err) => {
@@ -122,11 +125,13 @@ module.exports = {
         })
     },
     getFileOptions: () => {
-
         return {
             storage: multer.diskStorage({
                 destination:  (req, file, cb) => {
-                    const dir = req.body.folderPath || fileConfig.uploadsFolder
+                    let dir = req.body.folderPath || fileConfig.uploadsFolder
+                    if (req.body.fileFolderPath) {
+                        dir = `${dir}/${req.body.fileFolderPath}`
+                    }
                     fs.exists(dir, exist => {
                         if (!exist) {
                             return fs.mkdir(dir, error => cb(error, dir))
