@@ -140,7 +140,7 @@ export default {
     progress: 1,
     model: false,
     files: [],
-    enviados: 0,
+    enviados: 0
   }),
   methods: {
     removeFileFromUploadList (index) {
