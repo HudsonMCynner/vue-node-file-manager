@@ -36,7 +36,6 @@ export default class FileListService extends Rest {
    * @returns {Promise}
    */
   uploadFiles (files, folderPath, fileFolderPath, onUploadProgressCallback) {
-    debugger
     let formData = new FormData()
     formData.append('folderPath', folderPath)
     if (fileFolderPath) {

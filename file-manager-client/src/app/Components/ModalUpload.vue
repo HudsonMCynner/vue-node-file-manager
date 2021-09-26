@@ -140,7 +140,7 @@ export default {
     progress: 1,
     model: false,
     files: [],
-    enviados: 0
+    enviados: 0,
   }),
   methods: {
     removeFileFromUploadList (index) {
@@ -150,6 +150,8 @@ export default {
       if (!this.files.length) {
         return
       }
+      let total = this.files.map((file) => file.file.size).reduce((acc, next) => acc + next)
+      let send = 0
       const sendFileRecursive = (list, index) => {
         if (index >= list.length) {
           this.enviados = index
@@ -162,8 +164,9 @@ export default {
         const updateProgress = (progress) => {
           list[index].progress = ((progress.loaded / progress.total) * 100).toFixed(2)
           list[index].loaded = progress.loaded // bytes loaded
+          send = total - (total - progress.loaded)
+          console.log('~> ', this.kbToMb(send), this.kbToMb(total))
         }
-        debugger
         FileService.build().uploadFiles([list[index].file], this.folderPath, list[index].folderPath, updateProgress)
           .then(() => {
             sendFileRecursive(list, (index + 1))
