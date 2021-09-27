@@ -37,18 +37,19 @@
               stripe
               style="z-index: 9999;"
               size="25px"
-              :value="getProgress"
+              :value="getUploadPorcentage"
               color="primary"
             >
               <div class="absolute-full flex flex-center">
                 <q-badge
                   color="white"
                   text-color="accent"
-                  :label="`${(getProgress * 100).toFixed(2)}%`"
+                  :label="`${(getUploadPorcentage * 100).toFixed(2)}%`"
                 />
               </div>
             </q-linear-progress>
-            {{ enviados }} de {{ files.length }} Arquivos Enviados
+            <span>{{ enviados }} de {{ files.length }} Arquivos Enviados</span>
+            <span>{{ getUploadInfo }}</span>
           </div>
         </div>
       </q-card-section>
@@ -140,7 +141,9 @@ export default {
     progress: 1,
     model: false,
     files: [],
-    enviados: 0
+    enviados: 0,
+    totalUploadSize: 0,
+    totalUploadLoaded: 0
   }),
   methods: {
     removeFileFromUploadList (index) {
@@ -150,8 +153,7 @@ export default {
       if (!this.files.length) {
         return
       }
-      let total = this.files.map((file) => file.file.size).reduce((acc, next) => acc + next)
-      let send = 0
+      let $this = this
       const sendFileRecursive = (list, index) => {
         if (index >= list.length) {
           this.enviados = index
@@ -164,8 +166,8 @@ export default {
         const updateProgress = (progress) => {
           list[index].progress = ((progress.loaded / progress.total) * 100).toFixed(2)
           list[index].loaded = progress.loaded // bytes loaded
-          send = total - (total - progress.loaded)
-          console.log('~> ', this.kbToMb(send), this.kbToMb(total))
+          $this.totalUploadLoaded = $this.totalUploadSize - (progress.total - progress.loaded)
+          console.log('~> ', $this.kbToMb($this.totalUploadLoaded), $this.kbToMb($this.totalUploadSize))
         }
         FileService.build().uploadFiles([list[index].file], this.folderPath, list[index].folderPath, updateProgress)
           .then(() => {
@@ -190,6 +192,8 @@ export default {
     resetData () {
       this.files = []
       this.enviados = 0
+      this.totalUploadSize = 0
+      this.totalUploadLoaded = 0
     },
     linkUpload () {
       fetch('https://upload.wikimedia.org/wikipedia/commons/7/77/Delete_key1.jpg')
@@ -214,6 +218,7 @@ export default {
           }
           return fileObject
         }))
+        this.totalUploadSize = this.files.map((file) => file.file.size).reduce((acc, next) => acc + next)
       })
     }
   },
@@ -227,6 +232,12 @@ export default {
     }
   },
   computed: {
+    getUploadPorcentage () {
+      return this.totalUploadLoaded && this.totalUploadLoaded ? (this.totalUploadLoaded / this.totalUploadSize) : 0
+    },
+    getUploadInfo () {
+      return `${this.kbToMb(this.totalUploadLoaded)} de ${this.kbToMb(this.totalUploadSize)}`
+    },
     getProgress () {
       return this.files.length ? this.enviados / this.files.length : 0
     }

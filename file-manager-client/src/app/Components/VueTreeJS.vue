@@ -85,4 +85,7 @@ export default {
 >>> .tree-default .tree-node {
   margin-left: 13px;
 }
+>>> .tree-icon
+  font-size 20px
+  color #78A9F7
 </style>

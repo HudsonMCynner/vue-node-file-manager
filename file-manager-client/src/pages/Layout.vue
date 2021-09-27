@@ -76,6 +76,7 @@ export default {
             selected: true,
             opened: true,
             label: 'Meu Drive',
+            icon: 'far fa-folder',
             path: '',
             children: response
           }]

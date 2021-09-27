@@ -52,6 +52,7 @@ module.exports = {
                   return {
                       label: dirent.name,
                       path: `${source}/${dirent.name}`,
+                      icon: 'far fa-folder',
                       children: getDirectories(`${source}/${dirent.name}`)
                   }
               }).sort((a, b) => a.label < b.label)
