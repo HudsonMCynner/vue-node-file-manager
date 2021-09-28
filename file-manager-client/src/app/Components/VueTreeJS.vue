@@ -77,7 +77,7 @@
             dense
             v-model="folderName"
             autofocus
-            @keyup.enter="prompt = false"
+            @keyup.enter="newFolder"
           />
         </q-card-section>
 
@@ -152,7 +152,6 @@ export default {
     customItemClickWithCtrl () {},
     // eslint-disable-next-line no-unused-vars
     rightClick (node, model, event) {
-      debugger
       this.selectedNode = model
     },
     itemClick (node) {

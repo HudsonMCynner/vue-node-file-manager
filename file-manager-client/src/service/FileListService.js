@@ -108,4 +108,13 @@ export default class FileListService extends Rest {
   removeDirectory (folderPath) {
     return this.post('/dir/delete/', { folderPath })
   }
+
+  /***
+   * @returns {Promise}
+   * @param file
+   * @param newName
+   */
+  rename (file, newName) {
+    return this.put('/files/rename', { file, newName })
+  }
 }

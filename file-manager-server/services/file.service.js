@@ -208,11 +208,16 @@ module.exports = {
     },
     renameFile: (req, res, next) => {
         let oldName = `${req.body.file.path}/${req.body.file.name}`
-        let newName = `${req.body.file.path}/${req.body.newName}`
-        fs.rename(oldName, newName, function (err) {
-            if (err) throw err;
-            console.log('File Renamed.');
-        });
+        let ext = path.extname(req.body.file.name)
+        let newName = `${req.body.file.path}/${req.body.newName}${ext}`
+        File.updateOne({ _id: req.body.file._id }, { name: `${req.body.newName}${ext}` }, (err, file) => {
+            fs.rename(oldName, newName, function (err) {
+                if (err) throw err;
+                console.log('File Renamed.');
+                res.send({ code: 200 })
+
+            });
+        })
     },
     deleteFile (req, res, next) {
         File.findOne({_id: req.params.id}, (err, file) => {

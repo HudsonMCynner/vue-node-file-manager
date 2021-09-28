@@ -103,27 +103,36 @@
                   v-close-popup
                 >
                   <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                    <q-icon name="fas fa-link" style="font-size: 16px; color: #78a9f8"/>
+                    <q-icon
+                      name="fas fa-link"
+                      style="font-size: 16px; color: #78a9f8"
+                    />
                     Gerar Link
                   </q-item-section>
                 </q-item>
                 <q-item
                   clickable
-                  @click="rename(file)"
+                  @click="downloadFile(file)"
                   v-close-popup
                 >
                   <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                    <q-icon name="fas fa-download" style="font-size: 16px; color: #78a9f8"/>
+                    <q-icon
+                      name="fas fa-download"
+                      style="font-size: 16px; color: #78a9f8"
+                    />
                     Download
                   </q-item-section>
                 </q-item>
                 <q-item
                   clickable
-                  @click="rename(file)"
+                  @click="renameFile"
                   v-close-popup
                 >
                   <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                    <q-icon name="fas fa-i-cursor" style="font-size: 16px; color: #78a9f8"/>
+                    <q-icon
+                      name="fas fa-i-cursor"
+                      style="font-size: 16px; color: #78a9f8"
+                    />
                     Renomear
                   </q-item-section>
                 </q-item>
@@ -163,7 +172,10 @@
               v-close-popup
             >
               <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                <q-icon name="fas fa-link" style="font-size: 16px; color: #78a9f8"/>
+                <q-icon
+                  name="fas fa-link"
+                  style="font-size: 16px; color: #78a9f8"
+                />
                 Gerar Link
               </q-item-section>
             </q-item>
@@ -173,17 +185,23 @@
               v-close-popup
             >
               <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                <q-icon name="fas fa-download" style="font-size: 16px; color: #78a9f8"/>
+                <q-icon
+                  name="fas fa-download"
+                  style="font-size: 16px; color: #78a9f8"
+                />
                 Download
               </q-item-section>
             </q-item>
             <q-item
               clickable
-              @click="rename(file)"
+              @click="renameFile"
               v-close-popup
             >
               <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
-                <q-icon name="fas fa-i-cursor" style="font-size: 16px; color: #78a9f8"/>
+                <q-icon
+                  name="fas fa-i-cursor"
+                  style="font-size: 16px; color: #78a9f8"
+                />
                 Renomear
               </q-item-section>
             </q-item>
@@ -191,6 +209,43 @@
         </q-menu>
       </div>
     </div>
+    <q-dialog
+      v-model="promptRename"
+      persistent
+    >
+      <q-card style="min-width: 350px">
+        <q-card-section>
+          <div class="text-h6">
+            Renomear
+          </div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none">
+          <q-input
+            dense
+            v-model="promptRenameNewName"
+            autofocus
+            @keyup.enter="confirmeRename"
+          />
+        </q-card-section>
+
+        <q-card-actions
+          align="right"
+          class="text-primary"
+        >
+          <q-btn
+            flat
+            label="Cancel"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            label="Ok"
+            @click="confirmeRename"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -222,6 +277,8 @@ export default {
     }
   },
   data: () => ({
+    promptRename: false,
+    promptRenameNewName: '',
     fileIcons: {
       pdf: 'fa fa-file-pdf',
       txt: 'fa fa-file-text',
@@ -334,14 +391,19 @@ export default {
       link.target = '_blank'
       link.download = name
       link.click()
-      console.log('~> ', link.href)
     },
-    rename (file) {
-      console.log('~> ', file)
+    renameFile () {
+      this.promptRename = true
+      this.promptRenameNewName = this.selected[0].name
+    },
+    confirmeRename () {
+      FileService.build().rename(this.selected[0], this.newNameFile)
+        .then((response) => {
+          console.log('~> ', response)
+        })
     },
     gerarLink ({ encodedName }) {
       navigator.clipboard.writeText(`${BASE_URL}/file/download/${encodedName}`)
-      console.log('~> ', `${BASE_URL}/file/download/${encodedName}`)
       this.$notify.info('Link gerado e copiado')
     },
     uploadEnd () {

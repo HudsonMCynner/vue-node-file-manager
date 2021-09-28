@@ -13,5 +13,6 @@ router.get('/files/dir/', fileService.getFilesByDir);
 router.get('/files/total', fileService.getTotalOfFiles);
 router.post('/dirs/create/', fileService.createDirectory);
 router.post('/dir/delete/', fileService.deleteDirectory);
+router.put('/files/rename', fileService.renameFile);
 
 module.exports = router;
