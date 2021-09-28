@@ -74,7 +74,6 @@ export default {
       FileService.build().getAllDir()
         .then((response) => {
           this.nodes = [{
-            selected: true,
             opened: true,
             label: 'Meu Drive',
             icon: 'far fa-folder',

@@ -1,6 +1,7 @@
 <template>
   <div class="tree-container">
     <v-jstree
+      style="height: 100%;"
       v-if="show"
       :data="model"
       allow-batch
@@ -52,7 +53,7 @@
           </q-menu>
           <i
             class="tree-icon tree-icon tree-themeicon tree-themeicon-custom"
-            :class="_.model.opened ? 'far fa-folder-open' : 'far fa-folder'"
+            :class="_.model.opened || _.model.selected ? 'far fa-folder-open' : 'far fa-folder'"
             role="presentation"
             v-if="!_.model.loading"
           />
@@ -188,5 +189,5 @@ export default {
 }
 >>> .tree-icon
   font-size 20px
-  color #78A9F7
+  color $primary
 </style>

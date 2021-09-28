@@ -56,7 +56,6 @@
             <th class="style-th">
               Tamanho
             </th>
-            <th />
           </tr>
         </thead>
         <tbody>
@@ -90,36 +89,46 @@
             >
               {{ kbToMb(file.size) }}
             </td>
-            <td
-              class="style-td"
-              style="width: 45px"
+            <q-menu
+              touch-position
+              context-menu
             >
-              <q-btn
-                v-if="!file.folder"
-                flat
+              <q-list
                 dense
-                size="md"
-                icon="fas fa-download"
-                @click="downloadFile(file)"
-              />
-            </td>
-            <!--            <q-menu-->
-            <!--              touch-position-->
-            <!--              context-menu-->
-            <!--            >-->
-            <!--              <q-list-->
-            <!--                dense-->
-            <!--                style="min-width: 100px"-->
-            <!--              >-->
-            <!--                <q-item-->
-            <!--                  clickable-->
-            <!--                  @click="gerarLink(file)"-->
-            <!--                  v-close-popup-->
-            <!--                >-->
-            <!--                  <q-item-section>Gerar Link</q-item-section>-->
-            <!--                </q-item>-->
-            <!--              </q-list>-->
-            <!--            </q-menu>-->
+                style="min-width: 100px"
+              >
+                <q-item
+                  clickable
+                  @click="gerarLink(file)"
+                  v-close-popup
+                >
+                  <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                    <q-icon name="fas fa-link" style="font-size: 16px; color: #78a9f8"/>
+                    Gerar Link
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  @click="rename(file)"
+                  v-close-popup
+                >
+                  <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                    <q-icon name="fas fa-download" style="font-size: 16px; color: #78a9f8"/>
+                    Download
+                  </q-item-section>
+                </q-item>
+                <q-item
+                  clickable
+                  @click="rename(file)"
+                  v-close-popup
+                >
+                  <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                    <q-icon name="fas fa-i-cursor" style="font-size: 16px; color: #78a9f8"/>
+                    Renomear
+                  </q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
           </tr>
         </tbody>
       </table>
@@ -133,20 +142,13 @@
         v-for="(file, index) in getFiles"
         :key="index"
         @click="selectFile($event, file)"
+        @click.right="selected = [file]"
         :class="{'selected-row': isSelected(file._id)}"
       >
         <q-icon
           :name="getIcon(file)"
         />
         <span class="file-label">{{ file.name }}</span>
-        <q-btn
-          v-if="!file.folder"
-          class="download-btn"
-          flat
-          dense
-          icon="fas fa-download"
-          @click="downloadFile(file)"
-        />
         <q-menu
           touch-position
           context-menu
@@ -160,7 +162,30 @@
               @click="gerarLink(file)"
               v-close-popup
             >
-              <q-item-section>Gerar Link</q-item-section>
+              <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                <q-icon name="fas fa-link" style="font-size: 16px; color: #78a9f8"/>
+                Gerar Link
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              @click="downloadFile(file)"
+              v-close-popup
+            >
+              <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                <q-icon name="fas fa-download" style="font-size: 16px; color: #78a9f8"/>
+                Download
+              </q-item-section>
+            </q-item>
+            <q-item
+              clickable
+              @click="rename(file)"
+              v-close-popup
+            >
+              <q-item-section style="display: grid; grid-template-columns: 25px 1fr; align-items: center;">
+                <q-icon name="fas fa-i-cursor" style="font-size: 16px; color: #78a9f8"/>
+                Renomear
+              </q-item-section>
             </q-item>
           </q-list>
         </q-menu>
@@ -311,6 +336,9 @@ export default {
       link.click()
       console.log('~> ', link.href)
     },
+    rename (file) {
+      console.log('~> ', file)
+    },
     gerarLink ({ encodedName }) {
       navigator.clipboard.writeText(`${BASE_URL}/file/download/${encodedName}`)
       console.log('~> ', `${BASE_URL}/file/download/${encodedName}`)
@@ -443,6 +471,7 @@ export default {
       top 50%
       left 50%
       transform translate(-50%, -50%)
+      color: #7a7d7d;
     .file-label
       position: absolute;
       bottom: -30px;
@@ -454,11 +483,6 @@ export default {
       -webkit-box-orient: vertical;
       overflow: hidden;
       width: 100%;
-    .download-btn
-      position absolute
-      right 0
-      bottom 0
-      font-size 10px
 
 // ================ List ==============
 .tableFixHead

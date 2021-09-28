@@ -167,7 +167,7 @@ export default {
         FileService.build().uploadFiles([list[index].file], this.folderPath, list[index].folderPath, updateProgress)
           .then(() => {
             sendFileRecursive(list, (index + 1))
-            this.$emit('update:storage')
+            // this.$emit('update:storage')
           })
           .catch(() => {
             list[index].erro = true
