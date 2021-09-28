@@ -27,6 +27,7 @@
       <navigator
         @path:selected="getFilesByDir"
         @create:folder="createFolder"
+        @delete:folder="deleteFolder"
         :value="nodes"
       />
       <storage-info
@@ -85,6 +86,17 @@ export default {
     createFolder (event) {
       FileService.build().createDirectory(event)
         .then(this.updateDirectories)
+    },
+    deleteFolder (event) {
+      FileService.build().removeDirectory(event)
+        .then(() => {
+          this.getStorageUsage()
+          this.updateDirectories()
+          FileService.build().getFilesByDir(this.folderPath)
+            .then((response) => {
+              this.files = response
+            })
+        })
     },
     getStorageUsage () {
       this.updateDirectories()

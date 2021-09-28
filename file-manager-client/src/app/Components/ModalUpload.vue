@@ -34,6 +34,7 @@
           </div>
           <div class="upload-info">
             <q-linear-progress
+              v-if="false"
               stripe
               style="z-index: 9999;"
               size="25px"
@@ -48,8 +49,7 @@
                 />
               </div>
             </q-linear-progress>
-            <span>{{ enviados }} de {{ files.length }} Arquivos Enviados</span>
-            <span>{{ getUploadInfo }}</span>
+            <span v-if="files.length">{{ enviados }} de {{ files.length }} Arquivos Enviados</span>
           </div>
         </div>
       </q-card-section>
@@ -141,9 +141,7 @@ export default {
     progress: 1,
     model: false,
     files: [],
-    enviados: 0,
-    totalUploadSize: 0,
-    totalUploadLoaded: 0
+    enviados: 0
   }),
   methods: {
     removeFileFromUploadList (index) {
@@ -153,7 +151,6 @@ export default {
       if (!this.files.length) {
         return
       }
-      let $this = this
       const sendFileRecursive = (list, index) => {
         if (index >= list.length) {
           this.enviados = index
@@ -166,8 +163,6 @@ export default {
         const updateProgress = (progress) => {
           list[index].progress = ((progress.loaded / progress.total) * 100).toFixed(2)
           list[index].loaded = progress.loaded // bytes loaded
-          $this.totalUploadLoaded = $this.totalUploadSize - (progress.total - progress.loaded)
-          console.log('~> ', $this.kbToMb($this.totalUploadLoaded), $this.kbToMb($this.totalUploadSize))
         }
         FileService.build().uploadFiles([list[index].file], this.folderPath, list[index].folderPath, updateProgress)
           .then(() => {
@@ -234,9 +229,6 @@ export default {
   computed: {
     getUploadPorcentage () {
       return this.totalUploadLoaded && this.totalUploadLoaded ? (this.totalUploadLoaded / this.totalUploadSize) : 0
-    },
-    getUploadInfo () {
-      return `${this.kbToMb(this.totalUploadLoaded)} de ${this.kbToMb(this.totalUploadSize)}`
     },
     getProgress () {
       return this.files.length ? this.enviados / this.files.length : 0

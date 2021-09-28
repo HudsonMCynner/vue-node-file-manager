@@ -100,4 +100,12 @@ export default class FileListService extends Rest {
       }
     })
   }
+
+  /***
+   * @param folderPath
+   * @returns {Promise}
+   */
+  removeDirectory (folderPath) {
+    return this.post('/dir/delete/', { folderPath })
+  }
 }

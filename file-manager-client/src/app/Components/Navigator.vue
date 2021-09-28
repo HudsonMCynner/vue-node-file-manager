@@ -20,6 +20,7 @@
       :value="getMenus"
       @folder:selected="itemClick"
       @create:folder="newFolder"
+      @delete:folder="deleteFolder"
     />
   </div>
 </template>
@@ -49,6 +50,9 @@ export default {
   methods: {
     newFolder (event) {
       this.$emit('create:folder', event)
+    },
+    deleteFolder (event) {
+      this.$emit('delete:folder', event)
     },
     itemClick (node) {
       this.$emit('path:selected', node.model)

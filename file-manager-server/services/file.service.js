@@ -14,21 +14,7 @@ mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 
 module.exports = {
-    createDirectory: (base = fileConfig.uploadsFolder) => {
-        const mkdir = (dir) => {
-            fs.exists(dir, exist => {
-                if (!exist) {
-                    return fs.mkdir(dir, error => new Error(dir))
-                }
-            })
-        }
-        const paths = fileConfig.baseDirectories
-        mkdir(base)
-        paths.forEach((path) => {
-            mkdir(`${base}/${path}`)
-        })
-    },
-    createDirectoryFolder: (req, res, next) => {
+    createDirectory: (req, res, next) => {
         const mkdir = (dir) => {
             fs.exists(dir, exist => {
                 if (!exist) {
@@ -43,6 +29,17 @@ module.exports = {
             })
         }
         mkdir(`${req.body.base.base || fileConfig.uploadsFolder}/${req.body.base.children}`)
+    },
+    deleteDirectory: (req, res, next) => {
+        const path = req.body.folderPath
+        fs.rm(path, { recursive: true }, () => {
+            File.deleteMany({ path }, (err, files) => {
+                if (err) {
+                    return res.status(404).end();
+                }
+                res.send({ code: 200, message: 'Arquivos removidos com sucesso!' });
+            });
+        });
     },
     getDir: (req, res, next) => {
         const getDirectories = (source) => {
@@ -60,12 +57,12 @@ module.exports = {
         res.send(getDirectories(fileConfig.uploadsFolder));
     },
     getFilesByDir: (req, res, next) => {
-        File.find((err, files) => {
-            let path = req.query.path || fileConfig.uploadsFolder
+        let path = req.query.path || fileConfig.uploadsFolder
+        File.find({ path }, (err, files) => {
             files = files.filter((file) => {
                 if (file.folder) {
                     let paths = path.split('/')
-                    return file.name !== paths[paths.length - 1] && file.path.indexOf(path) > -1
+                    return file.name !== paths[paths.length - 1]
                 }
                 return file.path.indexOf(path) > -1
             })
@@ -85,7 +82,7 @@ module.exports = {
         });
     },
     getTotalOfFiles: (req, res, next) => {
-        File.find((err, files) => {
+        File.find({ folder: false }, (err, files) => {
             if (err) {
                 return res.status(404).end();
             }
@@ -95,7 +92,6 @@ module.exports = {
     },
     uploadFile: (req, res, next) => {
         let savedModels = []
-
         async.each(req.files, (file, callback) => {
             let fileModel = new File({
                 name: file.filename
