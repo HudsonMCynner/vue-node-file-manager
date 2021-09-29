@@ -397,9 +397,10 @@ export default {
       this.promptRenameNewName = this.selected[0].name
     },
     confirmeRename () {
-      FileService.build().rename(this.selected[0], this.newNameFile)
+      FileService.build().rename(this.selected[0], this.promptRenameNewName)
         .then((response) => {
           console.log('~> ', response)
+          this.promptRename = false
         })
     },
     gerarLink ({ encodedName }) {

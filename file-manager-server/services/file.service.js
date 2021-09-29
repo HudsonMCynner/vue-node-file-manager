@@ -208,9 +208,8 @@ module.exports = {
     },
     renameFile: (req, res, next) => {
         let oldName = `${req.body.file.path}/${req.body.file.name}`
-        let ext = path.extname(req.body.file.name)
-        let newName = `${req.body.file.path}/${req.body.newName}${ext}`
-        File.updateOne({ _id: req.body.file._id }, { name: `${req.body.newName}${ext}` }, (err, file) => {
+        let newName = `${req.body.file.path}/${req.body.newName}`
+        File.updateOne({ _id: req.body.file._id }, { name: `${req.body.newName}` }, (err, file) => {
             fs.rename(oldName, newName, function (err) {
                 if (err) throw err;
                 console.log('File Renamed.');
