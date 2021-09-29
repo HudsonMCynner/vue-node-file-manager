@@ -11,5 +11,5 @@ module.exports = {
     maxFileSize: 2147483648, // Bytes 2GB
     uploadsFolder: 'F:/uploads', // Root
     baseDirectories: ['Documentos', 'Trabalho', 'Estudo', 'Outros'],
-    dbConnection: 'mongodb://127.0.0.1:27017/fileuploaddb'
+    dbConnection: 'postgres://postgres:postgres@localhost:5432/fileuploaddb'
 }

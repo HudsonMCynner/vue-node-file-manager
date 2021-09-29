@@ -1,4 +1,3 @@
-const mongoose = require('mongoose');
 const File = require('../models/file');
 const multer = require('multer');
 const async = require('async')
@@ -9,9 +8,7 @@ const { readdirSync } = require('fs')
 
 const fileConfig = require('../config/file.config')
 
-const mongoDB = fileConfig.dbConnection;
-mongoose.connect(mongoDB, { useNewUrlParser: true });
-mongoose.Promise = global.Promise;
+File.sync();
 
 module.exports = {
     createDirectory: (req, res, next) => {
