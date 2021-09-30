@@ -397,11 +397,8 @@ export default {
       this.promptRenameNewName = this.selected[0].name
     },
     confirmeRename () {
-      FileService.build().rename(this.selected[0], this.promptRenameNewName)
-        .then((response) => {
-          console.log('~> ', response)
-          this.promptRename = false
-        })
+      this.promptRename = false
+      this.$emit('file:rename', { file: this.selected[0], newName: this.promptRenameNewName })
     },
     gerarLink ({ encodedName }) {
       navigator.clipboard.writeText(`${BASE_URL}/file/download/${encodedName}`)

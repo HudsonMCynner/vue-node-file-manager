@@ -42,6 +42,7 @@
         :folder-path="folderPath"
         @update:list="getStorageUsage"
         @update:storage="getStorageUsage"
+        @file:rename="renameFile"
       />
     </q-page-container>
   </q-layout>
@@ -63,13 +64,20 @@ export default {
   }),
   created () {
     this.updateDirectories()
-    FileService.build().getFilesByDir(this.folderPath)
-      .then((response) => {
-        this.files = response
-      })
+    this.updateFileList()
     this.getStorageUsage()
   },
   methods: {
+    updateFileList () {
+      FileService.build().getFilesByDir(this.folderPath)
+        .then((response) => {
+          this.files = response
+        })
+    },
+    renameFile (event) {
+      FileService.build().rename(event.file, event.newName)
+        .then(this.updateFileList)
+    },
     updateDirectories () {
       FileService.build().getAllDir()
         .then((response) => {
@@ -91,10 +99,7 @@ export default {
         .then(() => {
           this.getStorageUsage()
           this.updateDirectories()
-          FileService.build().getFilesByDir(this.folderPath)
-            .then((response) => {
-              this.files = response
-            })
+          this.updateFileList()
         })
     },
     getStorageUsage () {
