@@ -8,7 +8,7 @@ const File = database.define('file', {
     allowNull: false,
     primaryKey: true
   },
-  nome: {
+  name: {
     type: Sequelize.STRING,
     allowNull: false
   },

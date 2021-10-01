@@ -64,7 +64,7 @@
             :key="index"
             @click="selectFile($event, file)"
             @click.right="selected = [file]"
-            :class="{'selected-row': isSelected(file._id)}"
+            :class="{'selected-row': isSelected(file.id)}"
           >
             <td class="style-td">
               <div
@@ -152,7 +152,7 @@
         :key="index"
         @click="selectFile($event, file)"
         @click.right="selected = [file]"
-        :class="{'selected-row': isSelected(file._id)}"
+        :class="{'selected-row': isSelected(file.id)}"
       >
         <q-icon
           :name="getIcon(file)"
@@ -417,7 +417,7 @@ export default {
           this.updateList()
           return this.$notify.success('Arquivos excluídos com sucesso!')
         }
-        FileService.build().deleteFile(list[index]._id, this.folderPath)
+        FileService.build().deleteFile(list[index].id, this.folderPath)
           .then(() => {
             FileService.build().getFilesByDir(this.folderPath)
               .then(removeRecursive(list, (index + 1)))
@@ -427,7 +427,7 @@ export default {
     },
     selectFile (event, file) {
       if (event.ctrlKey) {
-        const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
+        const index = this.selected.findIndex((fileSel) => fileSel.id === file.id)
         if (index !== -1) {
           this.selected.splice(index, 1)
         }
@@ -439,9 +439,9 @@ export default {
       // if (event.shiftKey) {
       //   let inicio = 0
       //   if (this.selected.length) {
-      //     inicio = this.files.findIndex((item) => item._id === this.selected[this.selected.length - 1]._id) // pega sempre o ultimo selecionado
+      //     inicio = this.files.findIndex((item) => item.id === this.selected[this.selected.length - 1].id) // pega sempre o ultimo selecionado
       //   }
-      //   let fim = this.files.findIndex((item) => item._id === file._id)
+      //   let fim = this.files.findIndex((item) => item.id === file.id)
       //   if (inicio > fim) {
       //     for (let i = inicio; i <= fim; i--) {
       //       this.selected.push(this.files[i])
@@ -454,7 +454,7 @@ export default {
       //   }
       //   return
       // }
-      const index = this.selected.findIndex((fileSel) => fileSel._id === file._id)
+      const index = this.selected.findIndex((fileSel) => fileSel.id === file.id)
       if (index !== -1 && this.selected.length === 1) {
         this.selected.splice(index, 1)
       }
@@ -466,7 +466,7 @@ export default {
       if (!id) {
         return false
       }
-      return this.selected.some((file) => file._id === id)
+      return this.selected.some((file) => file.id === id)
     }
   },
   watch: {
