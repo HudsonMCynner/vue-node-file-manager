@@ -1,4 +1,4 @@
-const File = require('../models/file');
+const File = require('../models/File');
 const multer = require('multer');
 const async = require('async')
 const fs = require('fs')
