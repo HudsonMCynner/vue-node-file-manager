@@ -13,8 +13,7 @@ const File = database.define('file', {
     allowNull: false
   },
   encodedName: {
-    type: Sequelize.STRING,
-    allowNull: false
+    type: Sequelize.STRING
   },
   path: {
     type: Sequelize.STRING,
@@ -27,7 +26,9 @@ const File = database.define('file', {
     type: Sequelize.BIGINT
   },
   folder: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    allowNull: false,
+    defaultValue: false
   }
 })
 

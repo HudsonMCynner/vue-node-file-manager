@@ -94,7 +94,7 @@ module.exports = {
             }
         })
           .then((files) => {
-              let total = files.length ? files.map((file) => file.size).reduce((acc, next) => acc + next) : 0
+              let total = files.length ? files.map((file) => Number(file.size)).reduce((acc, next) => acc + next) : 0
               res.send({ total });
           })
           .catch(() => {
@@ -109,32 +109,31 @@ module.exports = {
                 size: file.size,
                 mimetype:file.mimetype,
                 encodedName: btoa(file.filename),
-                path: req.body.folderPath || fileConfig.uploadsFolder
+                path: req.body.fileFolderPath ? `${req.body.folderPath || fileConfig.uploadsFolder}/${req.body.fileFolderPath}` : req.body.folderPath || fileConfig.uploadsFolder
             })
               .then((response) => {
                 savedModels.push(response)
                 callback()
                 console.log('File created successfully');
 
-                // if (req.body.fileFolderPath) {
-                //     fileModel.path = `${fileModel.path}/${req.body.fileFolderPath}`
-                //     let folderPath = `${req.body.folderPath || fileConfig.uploadsFolder}/${req.body.fileFolderPath}`
-                //     File.findOne({ path: folderPath }, (error, folder) => {
-                //         if (!folder) {
-                //             let paths = req.body.fileFolderPath.split('/')
-                //             let folderModel = new File({
-                //                 name: paths[paths.length - 1],
-                //                 path: folderPath,
-                //                 folder: true
-                //             })
-                //             folderModel.save((err) => {
-                //                 if (err) {
-                //                     return next('Error creating new folder', err);
-                //                 }
-                //             })
-                //         }
-                //     })
-                // }
+                if (req.body.fileFolderPath) {
+                    let folderPath = `${req.body.folderPath || fileConfig.uploadsFolder}/${req.body.fileFolderPath}`
+                  File.findOne({ where: { path: folderPath, folder: true } })
+                    .then((folder) => {
+                      if (!folder) {
+                        let paths = req.body.fileFolderPath.split('/')
+                        File.create({
+                          name: paths[paths.length - 1],
+                          path: folderPath,
+                          folder: true
+                        })
+                          .then(() => {})
+                          .catch(() => {
+                            return next('Error creating new folder', err);
+                          })
+                      }
+                    })
+                }
 
             })
             .catch((e) => {
