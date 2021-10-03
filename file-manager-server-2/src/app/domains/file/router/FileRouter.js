@@ -53,7 +53,14 @@ export default class FileRouter extends Route {
   _startRoutes () {
     this.uploadFile()
     this.downloadFile()
+    this.totalFileSize()
     super._startRoutes()
+  }
+
+  totalFileSize () {
+    this.app.get(`/${this.domain}/total`, (req, res, next) => {
+      this.controller.getTotalOfFiles(req, res, next)
+    })
   }
 
   downloadFile () {

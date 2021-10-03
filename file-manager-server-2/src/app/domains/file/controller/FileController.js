@@ -13,6 +13,21 @@ export default class FileController extends Controller {
    */
   repository = FileRepository.instance()
 
+  getTotalOfFiles (req, res, next) {
+    this.repository.findAll({
+      where: {
+        folder: false
+      }
+    })
+      .then((files) => {
+        let total = files.length ? files.map((file) => Number(file.size)).reduce((acc, next) => acc + next) : 0
+        res.send({ total });
+      })
+      .catch(() => {
+        return res.status(404).end();
+      })
+  }
+
   uploadFiles (req, res, next) {
     let savedModels = []
     let $this = this

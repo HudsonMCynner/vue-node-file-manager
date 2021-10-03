@@ -22,6 +22,10 @@ export default class Repository {
 		this.entity.sync()
 	}
 
+	findAll (params) {
+		return this.entity.findAll(params)
+	}
+
 	findOne (params) {
 		return this.entity.findOne(params)
 	}
