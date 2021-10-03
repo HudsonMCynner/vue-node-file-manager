@@ -51,23 +51,21 @@ export default class FileRouter extends Route {
   controller = FileController.instance()
 
   _startRoutes () {
-    this.upload()
+    this.uploadFile()
+    this.downloadFile()
     super._startRoutes()
   }
 
-
-  /**
-   */
-  save () {
-    this.app.post(`/${this.domain}`, (req, res, next) => {
-      this.controller.save(req, res, next)
+  downloadFile () {
+    this.app.get(`/${this.domain}/download/:name`, (req, res, next) => {
+      this.controller.downloadFile(req, res, next)
     })
   }
 
-  upload () {
+  uploadFile () {
     // '/upload', multer.any(), fileService.uploadFile);
     this.app.post(`/${this.domain}/upload`, multerStorage.any(), (req, res, next) => {
-      this.controller.upload(req, res, next)
+      this.controller.uploadFiles(req, res, next)
     })
   }
 }

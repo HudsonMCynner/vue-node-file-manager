@@ -1,5 +1,6 @@
 import Controller from '../../../crud/controller/Controller.js'
 import FileRepository from '../repository/FileRepository.js'
+import path from 'path'
 const async = require('async')
 const btoa = require('btoa')
 
@@ -12,7 +13,7 @@ export default class FileController extends Controller {
    */
   repository = FileRepository.instance()
 
-  upload (req, res, next) {
+  uploadFiles (req, res, next) {
     let savedModels = []
     let $this = this
     async.each(req.files, (file, callback) => {
@@ -58,5 +59,40 @@ export default class FileController extends Controller {
       }
       return res.send(savedModels)
     })
+  }
+
+  downloadFile (req, res, next) {
+    this.repository.findOne({ where: { name: req.params.name } })
+      .then((file) => {
+        if (!file) {
+          this.repository.findOne({ where: { encodedName: req.params.name } })
+            .then((file) => {
+              if (!file) {
+                res.status(404).end();
+              }
+              // let fileLocation = path.join(__dirname, '..', 'uploads', file.name)
+              let fileLocation = path.join(file.path, file.name)
+
+              res.download(fileLocation, (err) => {
+                if (err) {
+                  res.status(400).end();
+                }
+              })
+            })
+            .catch((e) => {
+              res.status(400).end();
+            })
+          return
+        }
+        let fileLocation = path.join(file.path, file.name)
+        res.download(fileLocation, (err) => {
+          if (err) {
+            res.status(400).end();
+          }
+        })
+      })
+      .catch((e) => {
+        res.status(400).end();
+      })
   }
 }

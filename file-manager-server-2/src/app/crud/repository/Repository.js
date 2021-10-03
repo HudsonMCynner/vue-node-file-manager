@@ -22,6 +22,10 @@ export default class Repository {
 		this.entity.sync()
 	}
 
+	findOne (params) {
+		return this.entity.findOne(params)
+	}
+
 	/**
 	 * @param {Number} id
 	 * @returns {Promise<unknown>}
