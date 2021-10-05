@@ -51,12 +51,16 @@ export default class Repository {
 		})
 	}
 
+	destroy (params) {
+		return this.entity.destroy(params)
+	}
+
 	/**
 	 * @param {Number} id
 	 * @returns {Promise<unknown>}
 	 */
 	deleteById (id) {
-		return this.entity.destroy({ where: { 'id': id } })
+		return this.destroy({ where: { 'id': id } })
 	}
 
 	/**

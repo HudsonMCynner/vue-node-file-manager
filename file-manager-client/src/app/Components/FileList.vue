@@ -387,7 +387,7 @@ export default {
     },
     downloadFile ({ encodedName, name }) {
       const link = document.createElement('a')
-      link.href = `${BASE_URL}/file/download/${encodedName}`
+      link.href = `${BASE_URL}/files/download/${encodedName}`
       link.target = '_blank'
       link.download = name
       link.click()

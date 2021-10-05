@@ -19,13 +19,13 @@ export default class FileListService extends Rest {
   /**
    * @type {string}
    */
-  static resource = ''
+  static resource = '/files'
 
   /**
    * @returns {Promise}
    */
   getAllFiles () {
-    return this.get('/files')
+    return this.get('/')
   }
 
   /**
@@ -55,7 +55,7 @@ export default class FileListService extends Rest {
    * @returns {Promise}
    */
   deleteFile (fileId, folderPath) {
-    return this.delete(`/files/${fileId}`, {
+    return this.delete(`/${fileId}`, {
       params: {
         folderPath
       }
@@ -71,13 +71,13 @@ export default class FileListService extends Rest {
    * @returns {Promise}
    */
   getAllDir () {
-    return this.get(`/dirs`)
+    return this.get(`/directories/all`)
   }
   /**
    * @returns {Promise}
    */
   getTotalSizeOfFiles () {
-    return this.get(`/files/total`)
+    return this.get(`/total`)
   }
 
   /**
@@ -94,7 +94,7 @@ export default class FileListService extends Rest {
    * @returns {Promise}
    */
   getFilesByDir (path) {
-    return this.get('/files/dir', {
+    return this.get('/directories', {
       params: {
         path
       }

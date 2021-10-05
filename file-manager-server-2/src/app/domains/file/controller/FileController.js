@@ -1,6 +1,7 @@
 import Controller from '../../../crud/controller/Controller.js'
 import FileRepository from '../repository/FileRepository.js'
 import path from 'path'
+import fs, { readdirSync } from 'fs'
 const async = require('async')
 const btoa = require('btoa')
 
@@ -12,6 +13,76 @@ export default class FileController extends Controller {
    * @type {UsuarioRepository}
    */
   repository = FileRepository.instance()
+
+  createDirectory () {
+    const mkdir = (dir) => {
+      fs.exists(dir, exist => {
+        if (!exist) {
+          return fs.mkdir(dir, error => {
+            if (error) {
+              return res.status(500).end()
+            }
+            return res.send({ dir })
+          })
+        }
+        return dir
+      })
+    }
+    mkdir(`${req.body.base.base || process.env.uploadsFolder}/${req.body.base.children}`)
+  }
+
+  deleteDirectory (req, res, next) {
+    const path = req.body.folderPath
+    fs.rm(path, { recursive: true }, () => {
+      this.repository.destroy(
+        { where: { path } }
+      )
+        .then(() => {
+          res.send({ code: 200, message: 'Arquivos removidos com sucesso!' });
+        })
+        .catch((e) => {
+          return res.status(404).end();
+        })
+    });
+  }
+
+  getFilesByDirectory (req, res, next) {
+    let path = req.query.path || process.env.uploadsFolder
+    this.repository.findAll({
+      where: {
+        path
+      }
+    })
+      .then((files) => {
+        files = files.filter((file) => {
+          if (file.folder) {
+            let paths = path.split('/')
+            return file.name !== paths[paths.length - 1]
+          }
+          return file.path.indexOf(path) > -1
+        })
+        res.send(files);
+      })
+      .catch(() => {
+        return res.status(404).end();
+      })
+  }
+
+  getDirectories (req, res, next) {
+    const getDirectories = (source) => {
+      return readdirSync(source, { withFileTypes: true })
+        .filter(dirent => dirent.isDirectory())
+        .map(dirent => {
+          return {
+            label: dirent.name,
+            path: `${source}/${dirent.name}`,
+            icon: 'far fa-folder',
+            children: getDirectories(`${source}/${dirent.name}`)
+          }
+        }).sort((a, b) => a.label < b.label)
+    }
+    res.send(getDirectories(process.env.uploadsFolder));
+  }
 
   getTotalOfFiles (req, res, next) {
     this.repository.findAll({
@@ -25,6 +96,27 @@ export default class FileController extends Controller {
       })
       .catch(() => {
         return res.status(404).end();
+      })
+  }
+
+  renameFile (req, res, next) {
+    let oldName = `${req.body.file.path}/${req.body.file.name}`
+    let newName = `${req.body.file.path}/${req.body.newName}`
+    this.repository.update(
+      { name: `${req.body.newName}` },
+      { where: { id: req.body.file.id } }
+    )
+      .then((response) => {
+        fs.rename(oldName, newName, function (err) {
+          if (err) throw err;
+          console.log('File Renamed.');
+          res.send({ code: 200 })
+
+        });
+      })
+      .catch((e) => {
+        console.log('~> ', e)
+        res.status(400).end();
       })
   }
 
@@ -104,6 +196,24 @@ export default class FileController extends Controller {
           if (err) {
             res.status(400).end();
           }
+        })
+      })
+      .catch((e) => {
+        res.status(400).end();
+      })
+  }
+
+  deleteFile (req, res, next) {
+    this.repository.findOne({ where: {id: req.params.id} })
+      .then((file) => {
+        // let fileLocation = path.join(__dirname, '..', 'uploads', file.name)
+        let fileLocation = path.join(req.query.folderPath || process.env.uploadsFolder, file.name)
+        fs.unlink(fileLocation, () => {
+          this.repository.destroy({ where: {id: req.params.id} })
+            .then((response) => res.send({ code: 200 }))
+            .catch((e) => {
+              res.status(400).end();
+            })
         })
       })
       .catch((e) => {

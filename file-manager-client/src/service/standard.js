@@ -3,7 +3,7 @@ import axios from 'axios'
 export const BASE_URL = `${process.env.app.configurationFile ? window.configuration.serverAPI : process.env.api.BASE_URL}`
 export let TOKEN = ''
 const standard = axios.create({
-  baseURL: `${BASE_URL}/api`,
+  baseURL: `${BASE_URL}`,
   transformResponse: [
     function (data) {
       return data

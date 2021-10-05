@@ -54,7 +54,28 @@ export default class FileRouter extends Route {
     this.uploadFile()
     this.downloadFile()
     this.totalFileSize()
+    this.directories()
+    this.getFilesByDirectory()
+    this.deleteFile()
     super._startRoutes()
+  }
+
+  deleteFile () {
+    this.app.get(`/${this.domain}/:id`, (req, res, next) => {
+      this.controller.deleteFile(req, res, next)
+    })
+  }
+
+  getFilesByDirectory () {
+    this.app.get(`/${this.domain}/directories`, (req, res, next) => {
+      this.controller.getFilesByDirectory(req, res, next)
+    })
+  }
+
+  directories () { // Criar domain
+    this.app.get(`/${this.domain}/directories/all`, (req, res, next) => {
+      this.controller.getDirectories(req, res, next)
+    })
   }
 
   totalFileSize () {
