@@ -102,10 +102,7 @@ export default class FileController extends Controller {
   renameFile (req, res, next) {
     let oldName = `${req.body.file.path}/${req.body.file.name}`
     let newName = `${req.body.file.path}/${req.body.newName}`
-    this.repository.update(
-      { name: `${req.body.newName}` },
-      { where: { id: req.body.file.id } }
-    )
+    this.repository.update({ ...req.body.file, name: `${req.body.newName}` })
       .then((response) => {
         fs.rename(oldName, newName, function (err) {
           if (err) throw err;

@@ -68,7 +68,7 @@ export default class Controller {
 	deleteById (req, res, next) {
 		this.repository.deleteById(req.params._id)
 			.then((result) => {
-				res.status(200).send(result)
+				res.status(200).send({ code: 200 })
 			}).catch((error) => {
 			res.status(500).send({
 				err: 'Was not possible to delete the register!',

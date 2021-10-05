@@ -401,7 +401,7 @@ export default {
       this.$emit('file:rename', { file: this.selected[0], newName: this.promptRenameNewName })
     },
     gerarLink ({ encodedName }) {
-      navigator.clipboard.writeText(`${BASE_URL}/file/download/${encodedName}`)
+      navigator.clipboard.writeText(`${BASE_URL}/files/download/${encodedName}`)
       this.$notify.info('Link gerado e copiado')
     },
     uploadEnd () {

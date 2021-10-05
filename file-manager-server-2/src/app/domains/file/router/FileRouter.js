@@ -57,6 +57,7 @@ export default class FileRouter extends Route {
     this.directories()
     this.getFilesByDirectory()
     this.deleteFile()
+    this.renameFile()
     super._startRoutes()
   }
 
@@ -94,6 +95,12 @@ export default class FileRouter extends Route {
     // '/upload', multer.any(), fileService.uploadFile);
     this.app.post(`/${this.domain}/upload`, multerStorage.any(), (req, res, next) => {
       this.controller.uploadFiles(req, res, next)
+    })
+  }
+
+  renameFile () {
+    this.app.put(`/${this.domain}/rename`, (req, res, next) => {
+      this.controller.renameFile(req, res, next)
     })
   }
 }

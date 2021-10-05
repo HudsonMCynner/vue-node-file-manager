@@ -115,6 +115,6 @@ export default class FileListService extends Rest {
    * @param newName
    */
   rename (file, newName) {
-    return this.put('/files/rename', { file, newName })
+    return this.put('/rename', { file, newName })
   }
 }
