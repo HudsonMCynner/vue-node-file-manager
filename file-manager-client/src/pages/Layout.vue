@@ -92,7 +92,7 @@ export default {
         })
     },
     createFolder (event) {
-      FileService.build().createDirectory(event)
+      FolderService.build().create(event)
         .then(this.updateDirectories)
     },
     deleteFolder (event) {

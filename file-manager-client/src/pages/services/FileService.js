@@ -22,13 +22,6 @@ export default class FileService extends Rest {
   static resource = '/files'
 
   /**
-   * @returns {Promise}
-   */
-  getAllFiles () {
-    return this.get('/')
-  }
-
-  /**
    * @param files
    * @param folderPath
    * @param fileFolderPath
@@ -63,11 +56,6 @@ export default class FileService extends Rest {
   }
 
   /**
-   */
-  downloadFile () {
-  }
-
-  /**
    * @returns {Promise}
    */
   getAllDir () {
@@ -81,15 +69,6 @@ export default class FileService extends Rest {
   }
 
   /**
-   * @param base
-   * @param children
-   * @returns {Promise}
-   */
-  createDirectory (base, children) {
-    return this.post(`/dirs/create`, { base, children })
-  }
-
-  /**
    * @param path
    * @returns {Promise}
    */
@@ -99,14 +78,6 @@ export default class FileService extends Rest {
         path
       }
     })
-  }
-
-  /***
-   * @param folderPath
-   * @returns {Promise}
-   */
-  removeDirectory (folderPath) {
-    return this.post('/dir/delete/', { folderPath })
   }
 
   /***

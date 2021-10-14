@@ -22,10 +22,19 @@ export default class FolderService extends Rest {
   static resource = '/folders'
 
   /**
+   * @param base
+   * @param children
+   * @returns {Promise}
+   */
+  create (base, children) {
+    return this.post(`/create`, { base, children })
+  }
+
+  /**
    * @returns {Promise}
    */
   getAllDir () {
-    return this.get(`/directories/all`)
+    return this.get(`/all`)
   }
 
   /***
