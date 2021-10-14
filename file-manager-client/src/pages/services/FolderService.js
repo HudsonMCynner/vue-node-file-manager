@@ -42,6 +42,6 @@ export default class FolderService extends Rest {
    * @returns {Promise}
    */
   removeDirectory (folderPath) {
-    return this.post('/dir/delete/', { folderPath })
+    return this.post('/delete', { folderPath })
   }
 }

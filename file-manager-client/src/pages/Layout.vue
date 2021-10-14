@@ -96,7 +96,7 @@ export default {
         .then(this.updateDirectories)
     },
     deleteFolder (event) {
-      FileService.build().removeDirectory(event)
+      FolderService.build().removeDirectory(event)
         .then(() => {
           this.getStorageUsage()
           this.updateDirectories()

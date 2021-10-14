@@ -18,18 +18,25 @@ export default class FolderRouter extends Route {
   _startRoutes () {
     this.directories()
     this.create()
+    this.delete()
     super._startRoutes()
   }
 
   create () { // Criar domain
-    this.app.get(`/${this.domain}/create`, (req, res, next) => {
+    this.app.post(`/${this.domain}/create`, (req, res, next) => {
       this.controller.createDirectory(req, res, next)
     })
   }
 
-  directories () { // Criar domain
+  directories () {
     this.app.get(`/${this.domain}/all`, (req, res, next) => {
       this.controller.getDirectories(req, res, next)
+    })
+  }
+
+  delete () {
+    this.app.post(`/${this.domain}/delete`, (req, res, next) => {
+      this.controller.deleteDirectory(req, res, next)
     })
   }
 }

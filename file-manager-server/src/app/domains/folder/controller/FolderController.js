@@ -11,7 +11,7 @@ export default class FolderController extends Controller {
    */
   repository = FolderRepository.instance()
 
-  createDirectory () {
+  createDirectory (req, res, next) {
     const mkdir = (dir) => {
       fs.exists(dir, exist => {
         if (!exist) {
