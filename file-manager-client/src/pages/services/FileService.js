@@ -10,12 +10,12 @@
  * Observação:
  ***********************************************
  */
-import Rest from './Rest'
+import Rest from 'src/service/Rest'
 
 /**
- * @type {FileListService}
+ * @type {FileService}
  */
-export default class FileListService extends Rest {
+export default class FileService extends Rest {
   /**
    * @type {string}
    */

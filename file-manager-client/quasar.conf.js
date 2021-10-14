@@ -71,7 +71,7 @@ module.exports = function (ctx) {
         cfg.resolve.alias = {
           ...cfg.resolve.alias,
           'vue$': 'vue/dist/vue.esm.js',
-          'src': path.resolve(__dirname, './src')
+          'src': path.resolve(__dirname, 'src')
         }
       },
       env: env

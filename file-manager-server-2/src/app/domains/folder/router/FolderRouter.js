@@ -1,5 +1,5 @@
 import Route from '../../../crud/router/Route.js'
-import FileController from '../controller/FileController.js'
+import FolderController from '../controller/FolderController.js'
 import fs from 'fs'
 const multer = require('multer');
 const multerStorage = require('multer')({
@@ -39,61 +39,25 @@ const multerStorage = require('multer')({
 /**
  * @typedef {UsuarioRouter}
  */
-export default class FileRouter extends Route {
+export default class FolderRouter extends Route {
   /**
    * @type {string}
    */
-  domain = 'files'
+  domain = 'folders'
 
   /**
    * @type {FileController}
    */
-  controller = FileController.instance()
+  controller = FolderController.instance()
 
   _startRoutes () {
-    this.uploadFile()
-    this.downloadFile()
-    this.totalFileSize()
-    this.getFilesByDirectory()
-    this.deleteFile()
-    this.renameFile()
+    this.directories()
     super._startRoutes()
   }
 
-  deleteFile () {
-    this.app.get(`/${this.domain}/:id`, (req, res, next) => {
-      this.controller.deleteFile(req, res, next)
-    })
-  }
-
-  getFilesByDirectory () {
-    this.app.get(`/${this.domain}/directories`, (req, res, next) => {
-      this.controller.getFilesByDirectory(req, res, next)
-    })
-  }
-
-  totalFileSize () {
-    this.app.get(`/${this.domain}/total`, (req, res, next) => {
-      this.controller.getTotalOfFiles(req, res, next)
-    })
-  }
-
-  downloadFile () {
-    this.app.get(`/${this.domain}/download/:name`, (req, res, next) => {
-      this.controller.downloadFile(req, res, next)
-    })
-  }
-
-  uploadFile () {
-    // '/upload', multer.any(), fileService.uploadFile);
-    this.app.post(`/${this.domain}/upload`, multerStorage.any(), (req, res, next) => {
-      this.controller.uploadFiles(req, res, next)
-    })
-  }
-
-  renameFile () {
-    this.app.put(`/${this.domain}/rename`, (req, res, next) => {
-      this.controller.renameFile(req, res, next)
+  directories () { // Criar domain
+    this.app.get(`/${this.domain}/directories/all`, (req, res, next) => {
+      this.controller.getDirectories(req, res, next)
     })
   }
 }

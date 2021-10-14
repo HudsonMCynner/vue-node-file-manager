@@ -14,38 +14,6 @@ export default class FileController extends Controller {
    */
   repository = FileRepository.instance()
 
-  createDirectory () {
-    const mkdir = (dir) => {
-      fs.exists(dir, exist => {
-        if (!exist) {
-          return fs.mkdir(dir, error => {
-            if (error) {
-              return res.status(500).end()
-            }
-            return res.send({ dir })
-          })
-        }
-        return dir
-      })
-    }
-    mkdir(`${req.body.base.base || process.env.uploadsFolder}/${req.body.base.children}`)
-  }
-
-  deleteDirectory (req, res, next) {
-    const path = req.body.folderPath
-    fs.rm(path, { recursive: true }, () => {
-      this.repository.destroy(
-        { where: { path } }
-      )
-        .then(() => {
-          res.send({ code: 200, message: 'Arquivos removidos com sucesso!' });
-        })
-        .catch((e) => {
-          return res.status(404).end();
-        })
-    });
-  }
-
   getFilesByDirectory (req, res, next) {
     let path = req.query.path || process.env.uploadsFolder
     this.repository.findAll({
@@ -66,22 +34,6 @@ export default class FileController extends Controller {
       .catch(() => {
         return res.status(404).end();
       })
-  }
-
-  getDirectories (req, res, next) {
-    const getDirectories = (source) => {
-      return readdirSync(source, { withFileTypes: true })
-        .filter(dirent => dirent.isDirectory())
-        .map(dirent => {
-          return {
-            label: dirent.name,
-            path: `${source}/${dirent.name}`,
-            icon: 'far fa-folder',
-            children: getDirectories(`${source}/${dirent.name}`)
-          }
-        }).sort((a, b) => a.label < b.label)
-    }
-    res.send(getDirectories(process.env.uploadsFolder));
   }
 
   getTotalOfFiles (req, res, next) {

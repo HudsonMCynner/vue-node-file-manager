@@ -250,7 +250,7 @@
 </template>
 
 <script>
-import FileService from 'src/service/FileListService'
+import FileService from 'src/pages/services/FileService'
 import ModalUpload from 'src/app/Components/ModalUpload'
 import { BASE_URL } from 'src/service/standard'
 

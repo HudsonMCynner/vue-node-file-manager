@@ -49,7 +49,8 @@
 </template>
 
 <script type="text/javascript">
-import FileService from 'src/service/FileListService'
+import FileService from 'src/pages/services/FileService'
+import FolderService from 'src/pages/services/FolderService'
 import StorageInfo from 'src/app/Components/StorageInfo'
 
 export default {
@@ -79,7 +80,7 @@ export default {
         .then(this.updateFileList)
     },
     updateDirectories () {
-      FileService.build().getAllDir()
+      FolderService.build().getAllDir()
         .then((response) => {
           this.nodes = [{
             opened: true,

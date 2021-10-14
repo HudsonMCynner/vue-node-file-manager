@@ -114,7 +114,7 @@
 </template>
 
 <script>
-import FileService from 'src/service/FileListService'
+import FileService from 'src/pages/services/FileService'
 import FileMixin from 'src/app/Components/mixins/file'
 
 export default {
