@@ -96,7 +96,9 @@ export default class FileController extends Controller {
                     path: folderPath,
                     folder: true
                   })
-                    .then(() => {})
+                    .then(() => {
+                      res.send({ code: 200 })
+                    })
                     .catch(() => {
                       return next('Error creating new folder', err);
                     })
