@@ -12,6 +12,7 @@ export default class FolderController extends Controller {
   repository = FolderRepository.instance()
 
   createDirectory (req, res, next) {
+    let $this = this
     const mkdir = (dir) => {
       fs.exists(dir, exist => {
         if (!exist) {
@@ -19,7 +20,17 @@ export default class FolderController extends Controller {
             if (error) {
               return res.status(500).end()
             }
-            return res.send({ dir })
+            $this.repository.insert({
+              name: req.body.base.children,
+              path: dir,
+              folder: true
+            })
+              .then(() => {
+                res.send({ dir })
+              })
+              .catch(() => {
+                return next('Error creating new folder', err);
+              })
           })
         }
         return dir
